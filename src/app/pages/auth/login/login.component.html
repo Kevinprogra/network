@@ -1,0 +1,84 @@
+
+
+<ion-content class="login-content">
+
+  <div class="login-container">
+
+    <h2>WELCOME </h2>
+    <p>...</p>
+
+    <form (ngSubmit)="captura()">
+
+      
+      <ion-loading 
+        class="custom-loading" 
+        trigger="open-loading" 
+        message="Loading..." 
+        [duration]="1000">
+      </ion-loading>
+
+
+      <ion-label class="user">User name</ion-label>
+
+      <div class="poda">
+        <div class="glow"></div>
+        <div class="darkBorderBg"></div>
+        <div class="white"></div>
+        <div class="border"></div>
+
+        <div class="main">
+          <input 
+            type="text" 
+            name="username"
+            [(ngModel)]="username"
+            placeholder="..."
+            class="input"
+            required
+          />
+        </div>
+      </div>
+
+     
+      <ion-label 
+        id="open-loading" 
+        class="register" 
+        (click)="register()">
+        register 
+      </ion-label>
+
+     
+      <ion-label class="password">password</ion-label>
+
+      <div class="poda" style="margin-top: 15px;">
+        <div class="glow"></div>
+        <div class="darkBorderBg"></div>
+        <div class="white"></div>
+        <div class="border"></div>
+
+        <div class="main">
+          <input 
+            type="password" 
+            name="password"
+            [(ngModel)]="password"
+            placeholder="..."
+            class="input"
+            required
+          />
+        </div>
+      </div>
+
+      
+      <ion-label class="reset-password">
+        reset password
+      </ion-label>
+
+
+     <!-- From Uiverse.io by TimTrayler --> 
+<button>login</button>
+
+
+    </form>
+
+  </div>
+
+</ion-content>

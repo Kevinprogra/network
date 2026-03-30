@@ -1,0 +1,100 @@
+.login-content {
+  --background: linear-gradient(135deg, #154976, #28b5bd);
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+    width: 100%;
+
+  max-width: 80%;
+    background-size: 100% 100%;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin: 50px auto 0 auto;
+}
+
+.login-container h2 {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-container p {
+  color: rgb(240, 237, 237);
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.input-item-one{
+  margin-bottom: 15px;
+  border-radius: 12px;
+    --background: #677886;
+  
+}
+
+.input-item{
+  margin-bottom: 15px;
+  border-radius: 12px;
+  --background: #677886;
+  margin:0px;
+}
+
+.login-btn {
+    color: rgb(245, 229, 229);
+  margin-top: 70px;
+  --border-radius: 15px;
+  font-weight: bold;
+  max-width: 50%;
+  margin: 50px auto 0 auto;
+}
+
+.user {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+}
+.password {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.reset-password {
+    text-align: right;
+  display: block;
+  margin-bottom: 10px;
+  color: #121213;
+  cursor: pointer;
+  transition: 2.3s;
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+.register {
+   text-align: right;
+  display: block;
+  margin-bottom: 10px;
+   color: #121213;
+  cursor: pointer;
+  transition: 2.3s;
+  text-decoration: underline;
+}
+
+.register:hover {
+  color: #f2f4f3;
+  text-decoration: underline;
+  
+}
+
+
+ion-loading.custom-loading {
+  --background: #e3edff;
+  --spinner-color: #1c6dff;
+
+  color: #1c6dff;
+}

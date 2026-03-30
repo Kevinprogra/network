@@ -1,0 +1,44 @@
+
+
+<ion-content class="login-content">
+
+  <div class="login-container">
+
+    <h2>REGISTER</h2>
+
+    <form (ngSubmit)="captura()">
+
+
+     
+      
+
+      <ion-label class="user">User name</ion-label>
+      <ion-item class="input-item-one">
+        <ion-input [(ngModel)]="Username" name="username" required></ion-input>
+      </ion-item>
+    
+
+
+      <ion-label class=" password">password</ion-label>
+      <ion-item class="input-item">
+        <ion-input type="password" [(ngModel)]="Password" name="password" required></ion-input>
+      </ion-item>
+      
+
+      <ion-label class=" password">Confirm password</ion-label>
+      <ion-item class="input-item">
+        <ion-input type="password" [(ngModel)]="ConfirmPassword" name="confirmPassword" required></ion-input>
+      </ion-item>
+
+
+      <ion-button expand="block" type="submit" class="login-btn">
+        go
+      </ion-button>
+
+
+      
+    </form>
+
+  </div>
+
+</ion-content>

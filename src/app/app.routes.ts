@@ -1,10 +1,9 @@
 import { Routes } from '@angular/router';
+import { MainComponent } from './pages/main/main.component';
+import { HeaderComponent } from './core/header/header.component';
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-  },
+ 
 
 {
   path: 'login',
@@ -26,6 +25,18 @@ export const routes: Routes = [
   },
 
 
+  {
+    path: 'main',
+    loadComponent: () =>
+      import('./pages/main/main.component').then((m) => m.MainComponent),
+  },
+
+
+  {
+    path: 'header',
+    loadComponent: () =>
+      import('./core/header/header.component').then((m) => m.HeaderComponent),
+  }
 
 
 

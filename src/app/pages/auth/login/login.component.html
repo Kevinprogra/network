@@ -1,84 +1,92 @@
+<ion-content class="auth-content">
+  <section class="auth-shell">
+    <div class="auth-card">
+      <header class="card-header">
+        <p class="eyebrow">Bienvenido</p>
 
-
-<ion-content class="login-content">
-
-  <div class="login-container">
-
-    <h2>WELCOME </h2>
-    <p>...</p>
-
-    <form (ngSubmit)="captura()">
-
-      
-      <ion-loading 
-        class="custom-loading" 
-        trigger="open-loading" 
-        message="Loading..." 
-        [duration]="1000">
-      </ion-loading>
-
-
-      <ion-label class="user">User name</ion-label>
-
-      <div class="poda">
-        <div class="glow"></div>
-        <div class="darkBorderBg"></div>
-        <div class="white"></div>
-        <div class="border"></div>
-
-        <div class="main">
-          <input 
-            type="text" 
-            name="username"
-            [(ngModel)]="username"
-            placeholder="..."
-            class="input"
-            required
-          />
+        <div class="brand-mark" aria-hidden="true">
+          <div class="brand-glow"></div>
+          <ion-icon name="school-outline"></ion-icon>
         </div>
+
+        <p class="description">
+          Tu portal universitario centralizado para el exito academico.
+        </p>
+      </header>
+
+      <div class="auth-tabs" role="tablist" aria-label="Acceso">
+        <button class="tab is-active" type="button">Ingresar</button>
+        <button class="tab" type="button" (click)="goToRegister()">Registrarse</button>
       </div>
 
-     
-      <ion-label 
-        id="open-loading" 
-        class="register" 
-        (click)="register()">
-        register 
-      </ion-label>
-
-     
-      <ion-label class="password">password</ion-label>
-
-      <div class="poda" style="margin-top: 15px;">
-        <div class="glow"></div>
-        <div class="darkBorderBg"></div>
-        <div class="white"></div>
-        <div class="border"></div>
-
-        <div class="main">
-          <input 
-            type="password" 
-            name="password"
-            [(ngModel)]="password"
-            placeholder="..."
-            class="input"
-            required
-          />
+      <form (ngSubmit)="submit()" class="auth-form">
+        <div class="field-group">
+          <label class="field-label" for="login-email">Correo institucional</label>
+          <ion-item class="input-shell" lines="none">
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-input
+              id="login-email"
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              placeholder="usuario@universidad.edu.co"
+              required>
+            </ion-input>
+          </ion-item>
         </div>
-      </div>
 
-      
-      <ion-label class="reset-password">
-        reset password
-      </ion-label>
+        <div class="field-group">
+          <div class="field-row">
+            <label class="field-label" for="login-password">Contrasena</label>
+            <button class="forgot-link" type="button" (click)="forgotPassword()">
+              ¿La olvidaste?
+            </button>
+          </div>
 
+          <ion-item class="input-shell" lines="none">
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input
+              id="login-password"
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="••••••••"
+              required>
+            </ion-input>
+          </ion-item>
+        </div>
 
-     <!-- From Uiverse.io by TimTrayler --> 
-<button>login</button>
+        @if (errorMessage) {
+          <ion-text color="danger">
+            <p class="error">{{ errorMessage }}</p>
+          </ion-text>
+        }
 
+        @if (infoMessage) {
+          <ion-text color="primary">
+            <p class="info">{{ infoMessage }}</p>
+          </ion-text>
+        }
 
-    </form>
+        <ion-button expand="block" type="submit" class="submit-button" [disabled]="loading">
+          @if (loading) {
+            <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+            <span>Ingresar al Portal</span>
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          }
+        </ion-button>
+      </form>
 
-  </div>
-
+      <footer class="card-footer">
+        <div class="footer-links">
+          <button type="button">Politicas de Privacidad</button>
+          <button type="button">Soporte Tecnico</button>
+        </div>
+        <p class="footer-note">
+          © 2026 Campus University Application. Todos los derechos reservados.
+        </p>
+      </footer>
+    </div>
+  </section>
 </ion-content>

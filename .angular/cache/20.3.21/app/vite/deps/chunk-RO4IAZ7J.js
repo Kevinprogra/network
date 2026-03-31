@@ -2,15 +2,15 @@ import {
   d as d2
 } from "./chunk-VGZ3Y7MJ.js";
 import {
-  d
-} from "./chunk-WH2RCB7C.js";
-import {
   P,
   f,
   h,
   n,
   u
 } from "./chunk-3B5L6JJ3.js";
+import {
+  d
+} from "./chunk-WH2RCB7C.js";
 import {
   __async
 } from "./chunk-QHQP2P2Z.js";
@@ -214,7 +214,7 @@ var b = (n3) => {
   e.classList.remove("ion-page-invisible"), e.style.removeProperty("pointer-events"), void 0 !== i2 && (i2.classList.remove("ion-page-invisible"), i2.style.removeProperty("pointer-events")), w(e);
 };
 var h2 = (n3) => __async(null, null, function* () {
-  if (n3.leavingEl && n3.animated && 0 !== n3.duration) return n3.animationBuilder ? n3.animationBuilder : "ios" === n3.mode ? (yield import("./p-CBzELu-H-FCFM3SND.js")).iosTransitionAnimation : (yield import("./p-CU1SSH8_-PFOEML4F.js")).mdTransitionAnimation;
+  if (n3.leavingEl && n3.animated && 0 !== n3.duration) return n3.animationBuilder ? n3.animationBuilder : "ios" === n3.mode ? (yield import("./p-CBzELu-H-HN4U7GB6.js")).iosTransitionAnimation : (yield import("./p-CU1SSH8_-23FBOG23.js")).mdTransitionAnimation;
 });
 var y = (n3, e) => __async(null, null, function* () {
   yield k(e, true);
@@ -307,4 +307,4 @@ export {
    * (C) Ionic http://ionicframework.com - MIT License
    *)
 */
-//# sourceMappingURL=chunk-PRKPYJBM.js.map
+//# sourceMappingURL=chunk-RO4IAZ7J.js.map

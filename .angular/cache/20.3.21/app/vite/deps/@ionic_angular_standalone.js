@@ -1,15 +1,4 @@
 import {
-  o as o5
-} from "./chunk-VTS6MUXF.js";
-import {
-  t as t6
-} from "./chunk-EEEAY7BB.js";
-import {
-  i as i5,
-  r as r3,
-  t as t5
-} from "./chunk-VHRMAIPY.js";
-import {
   a as a2,
   e as e3,
   f as f4,
@@ -87,17 +76,82 @@ import {
   t2 as t3,
   x as x2,
   y as y2
-} from "./chunk-2K3D6L5S.js";
+} from "./chunk-BYAHFXMY.js";
+import {
+  l as l2
+} from "./chunk-RWQ6Z4M2.js";
 import {
   i as i2
-} from "./chunk-KEG26W2W.js";
+} from "./chunk-VX3I4KIN.js";
+import {
+  B,
+  D,
+  E,
+  L,
+  c as c2,
+  l as l3,
+  r,
+  s as s2,
+  v as v2
+} from "./chunk-RO4IAZ7J.js";
+import {
+  o as o3
+} from "./chunk-URFTZN5C.js";
+import {
+  o as o5
+} from "./chunk-VTS6MUXF.js";
 import {
   h,
   s as s3
 } from "./chunk-TCEW23F2.js";
 import {
-  o as o3
-} from "./chunk-ZR6Q7TUJ.js";
+  t as t6
+} from "./chunk-EEEAY7BB.js";
+import {
+  i as i5,
+  r as r3,
+  t as t5
+} from "./chunk-VHRMAIPY.js";
+import {
+  T,
+  _,
+  b,
+  c,
+  d as d2,
+  e,
+  f as f2,
+  i,
+  l,
+  m,
+  n as n2,
+  p,
+  s,
+  t,
+  u as u2,
+  v,
+  x,
+  y
+} from "./chunk-VGZ3Y7MJ.js";
+import {
+  Ct,
+  Dn,
+  I,
+  It,
+  Jt,
+  P,
+  Rn,
+  Vn,
+  W,
+  Zn,
+  f,
+  n,
+  q,
+  u
+} from "./chunk-3B5L6JJ3.js";
+import {
+  d,
+  o
+} from "./chunk-WH2RCB7C.js";
 import {
   ActivatedRoute,
   Router
@@ -167,60 +221,6 @@ import {
   ɵɵtemplate,
   ɵɵviewQuery
 } from "./chunk-2FX4D6HG.js";
-import {
-  l as l2
-} from "./chunk-7IOJGTFU.js";
-import {
-  B,
-  D,
-  E,
-  L,
-  c as c2,
-  l as l3,
-  r,
-  s as s2,
-  v as v2
-} from "./chunk-PRKPYJBM.js";
-import {
-  T,
-  _,
-  b,
-  c,
-  d as d2,
-  e,
-  f as f2,
-  i,
-  l,
-  m,
-  n as n2,
-  p,
-  s,
-  t,
-  u as u2,
-  v,
-  x,
-  y
-} from "./chunk-VGZ3Y7MJ.js";
-import {
-  d,
-  o
-} from "./chunk-WH2RCB7C.js";
-import {
-  Ct,
-  Dn,
-  I,
-  It,
-  Jt,
-  P,
-  Rn,
-  Vn,
-  W,
-  Zn,
-  f,
-  n,
-  q,
-  u
-} from "./chunk-3B5L6JJ3.js";
 import {
   __async,
   __objRest,
@@ -2297,11 +2297,11 @@ var d6 = Dn(class extends I {
   componentDidLoad() {
     this.rIC((() => __async(this, null, function* () {
       const t14 = s4(window, "hybrid");
-      if (n.getBoolean("_testing") || import("./p-BgwEQWW6-PEFCX64A.js").then(((t15) => t15.startTapClick(n))), n.getBoolean("statusTap", t14) && import("./p-CneGxKsZ-UCIFPERE.js").then(((t15) => t15.startStatusTap())), n.getBoolean("inputShims", m6())) {
+      if (n.getBoolean("_testing") || import("./p-BgwEQWW6-RRJKPZBO.js").then(((t15) => t15.startTapClick(n))), n.getBoolean("statusTap", t14) && import("./p-CneGxKsZ-UCIFPERE.js").then(((t15) => t15.startStatusTap())), n.getBoolean("inputShims", m6())) {
         const t15 = s4(window, "ios") ? "ios" : "android";
-        import("./p-Cwv-vmkN-D3FKHNTA.js").then(((e15) => e15.startInputShims(n, t15)));
+        import("./p-Cwv-vmkN-Z2FD6I5S.js").then(((e15) => e15.startInputShims(n, t15)));
       }
-      const e14 = yield import("./p-vEbVo2hO-FIFH3Y4Y.js"), i13 = t14 || o3();
+      const e14 = yield import("./p-vEbVo2hO-3CWHE2OB.js"), i13 = t14 || o3();
       n.getBoolean("hardwareBackButton", i13) ? e14.startHardwareBackButton() : (o3() && u("[ion-app] - experimentalCloseWatcher was set to `true`, but hardwareBackButton was set to `false`. Both config options must be `true` for the Close Watcher API to be used."), e14.blockHardwareBackButton()), "undefined" != typeof window && import("./p-D6Ynv7Xh-ZWOYARH5.js").then(((t15) => t15.startKeyboardAssist(window))), import("./p-BmVRXR1y-VDINOXZS.js").then(((t15) => this.focusVisible = t15.startFocusVisible()));
     })));
   }

@@ -1,10 +1,10 @@
 import {
   w
 } from "./chunk-VGZ3Y7MJ.js";
+import "./chunk-3B5L6JJ3.js";
 import {
   o
 } from "./chunk-WH2RCB7C.js";
-import "./chunk-3B5L6JJ3.js";
 import "./chunk-QHQP2P2Z.js";
 
 // node_modules/@ionic/core/components/p-BgwEQWW6.js
@@ -85,4 +85,4 @@ export {
    * (C) Ionic http://ionicframework.com - MIT License
    *)
 */
-//# sourceMappingURL=p-BgwEQWW6-PEFCX64A.js.map
+//# sourceMappingURL=p-BgwEQWW6-RRJKPZBO.js.map

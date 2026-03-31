@@ -1,48 +1,96 @@
-import { Component } from '@angular/core';
-import { FormsModule} from '@angular/forms';
-import { IonicModule, } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
- 
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonSpinner,
+  IonText,
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  arrowForwardOutline,
+  lockClosedOutline,
+  mailOutline,
+  schoolOutline,
+} from 'ionicons/icons';
 
-
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [FormsModule, IonicModule, RouterModule,]
-
-
+  imports: [
+    FormsModule,
+    RouterModule,
+    IonButton,
+    IonContent,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonSpinner,
+    IonText,
+  ],
 })
 export class LoginComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
+  email = '';
+  password = '';
+  loading = false;
+  errorMessage = '';
+  infoMessage = '';
 
-  username: string = '';  
-  password: string = '';
-
- 
-
- register() {
-  this.router.navigate(['/register']);
- }
-
-
-
- 
-  captura() {
-    console.log('Login:', this.username, this.password);
+  constructor() {
+    addIcons({
+      arrowForwardOutline,
+      lockClosedOutline,
+      mailOutline,
+      schoolOutline,
+    });
   }
 
+  async submit(): Promise<void> {
+    this.loading = true;
+    this.errorMessage = '';
+    this.infoMessage = '';
 
-  
+    try {
+      await this.authService.login(this.email, this.password);
+      await this.router.navigateByUrl('/main');
+    } catch (error) {
+      this.errorMessage = this.authService.getErrorMessage(error);
+      console.error(error);
+    } finally {
+      this.loading = false;
+    }
+  }
 
-  
+  goToRegister(): void {
+    void this.router.navigate(['/register']);
+  }
 
+  async forgotPassword(): Promise<void> {
+    this.errorMessage = '';
+    this.infoMessage = '';
 
+    if (!this.email.trim()) {
+      this.errorMessage = 'Ingresa primero tu correo institucional para recuperar la contrasena.';
+      return;
+    }
 
-
-
-  constructor(private router: Router,) { }
+    try {
+      await this.authService.resetPassword(this.email.trim());
+      this.infoMessage = 'Se envio un correo para restablecer la contrasena.';
+    } catch (error) {
+      this.errorMessage = this.authService.getErrorMessage(error);
+      console.error(error);
+    }
+  }
 }

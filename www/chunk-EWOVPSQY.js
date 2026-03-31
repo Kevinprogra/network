@@ -1,0 +1,1 @@
+import{Ra as o,hb as i,ib as r,yb as a}from"./chunk-PIOILHOA.js";var m=(()=>{let e=class e{constructor(){}ngOnInit(){}};e.\u0275fac=function(n){return new(n||e)},e.\u0275cmp=o({type:e,selectors:[["app-header"]],decls:2,vars:0,template:function(n,c){n&1&&(i(0,"p"),a(1," hola esto es el header "),r())},encapsulation:2});let t=e;return t})();export{m as a};

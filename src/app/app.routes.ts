@@ -28,6 +28,39 @@ export const routes: Routes = [
       import('./pages/main/main.component').then((m) => m.MainComponent),
   },
   {
+    path: 'news',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/news/news.component').then((m) => m.NewsComponent),
+  },
+  {
+    path: 'events',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/events/events.component').then((m) => m.EventsComponent),
+  },
+  {
+    path: 'messages',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/messages/messages.component').then((m) => m.MessagesComponent),
+  },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
+  },
+  {
+    path: 'chat',
+    redirectTo: 'messages',
+    pathMatch: 'full',
+  },
+  {
+    path: 'notifications',
+    redirectTo: 'news',
+    pathMatch: 'full',
+  },
+  {
     path: 'header',
     loadComponent: () =>
       import('./core/header/header.component').then((m) => m.HeaderComponent),

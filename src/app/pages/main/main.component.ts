@@ -3,7 +3,7 @@ import {RouterModule } from '@angular/router';
 import { FormsModule} from '@angular/forms';
 import { IonicModule, } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { HeaderComponent } from 'src/app/core/header/header.component';
+import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 
 @Component({
   selector: 'app-main',

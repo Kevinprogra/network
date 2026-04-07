@@ -9,9 +9,10 @@ import {
   query,
   serverTimestamp,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 
 import { Post } from '../../models/post.model';
+import { ProfileService } from './profile.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ import { Post } from '../../models/post.model';
 export class PostsService {
   private readonly firestore = inject(Firestore);
   private readonly auth = inject(Auth);
+  private readonly profileService = inject(ProfileService);
 
   getFeed(): Observable<Post[]> {
     const postsRef = collection(this.firestore, 'posts');
@@ -35,6 +37,7 @@ export class PostsService {
     }
 
     const cleanContent = content.trim();
+    const profile = await firstValueFrom(this.profileService.getCurrentProfile());
 
     if (!cleanContent) {
       throw new Error('Post content is empty.');
@@ -42,6 +45,7 @@ export class PostsService {
 
     const postsRef = collection(this.firestore, 'posts');
     const authorName =
+      profile?.displayName?.trim() ||
       currentUser.displayName?.trim() ||
       currentUser.email?.split('@')[0] ||
       'Usuario';
@@ -49,6 +53,7 @@ export class PostsService {
     await addDoc(postsRef, {
       authorId: currentUser.uid,
       authorName,
+      authorAvatarUrl: profile?.avatarUrl ?? '',
       authorRole: 'Comunidad academica',
       content: cleanContent,
       likesCount: 0,

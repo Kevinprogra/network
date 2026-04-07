@@ -1,15 +1,146 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/main"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Perfil</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content color="light" class="profile-content">
+  <input
+    #avatarInput
+    type="file"
+    accept="image/*"
+    hidden
+    (change)="onAvatarSelected($event)">
 
-<ion-content class="placeholder-content">
-  <section class="placeholder-card">
-    <h1>Modulo de Perfil</h1>
-    <p>Espacio reservado para informacion del usuario, bio, intereses y configuracion.</p>
-  </section>
+  <input
+    #cameraInput
+    type="file"
+    accept="image/*"
+    capture="environment"
+    hidden
+    (change)="onCameraSelected($event)">
+
+  <div class="profile-shell">
+    <div class="perfil-cabecera ion-text-center ion-padding">
+      <div class="avatar-actions">
+        <button class="avatar-button" type="button" (click)="abrirSelectorAvatar()">
+          <ion-avatar
+            class="avatar-grande"
+            [class.developer-avatar]="currentUser?.role === 'developer'">
+            <img
+              [src]="currentUser?.avatarUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'"
+              alt="Avatar del usuario">
+          </ion-avatar>
+          <div class="avatar-edit-badge">
+            <ion-icon name="create-outline"></ion-icon>
+          </div>
+        </button>
+
+        <button
+          class="avatar-preview-button"
+          type="button"
+          (click)="abrirVistaAvatar()"
+          [disabled]="!currentUser?.avatarUrl">
+          <ion-icon name="expand-outline"></ion-icon>
+          <span>Ver foto</span>
+        </button>
+      </div>
+      <p class="avatar-help">
+        {{ uploadingAvatar ? 'Subiendo foto...' : 'Toca la foto para cambiarla' }}
+      </p>
+      <div class="profile-name-row">
+        <h2 class="nombre-usuario">{{ currentUser?.displayName }}</h2>
+        @if (shouldShowRoleBadge(currentUser?.role)) {
+          <span class="role-badge" [class]="getRoleBadgeClass(currentUser?.role)">
+            {{ getRoleBadgeLabel(currentUser?.role) }}
+          </span>
+        }
+      </div>
+      <p class="correo-usuario">{{ currentUser?.email }}</p>
+      <p class="facultad">{{ currentUser?.academicProgram || 'Programa por completar' }}</p>
+      <ion-badge color="tertiary" mode="ios">
+        Semestre {{ currentUser?.semester || 'Pendiente' }}
+      </ion-badge>
+    </div>
+
+    <ion-grid class="stats-grid ion-padding-horizontal">
+      <ion-row>
+        <ion-col size="6">
+          <ion-card class="tarjeta-estadistica">
+            <ion-card-content class="ion-text-center">
+              <ion-icon name="book-outline" color="primary"></ion-icon>
+              <h2>6</h2>
+              <p>MATERIAS</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card class="tarjeta-estadistica">
+            <ion-card-content class="ion-text-center">
+              <ion-icon name="calendar-outline" color="success"></ion-icon>
+              <h2>4</h2>
+              <p>EVENTOS</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="ion-padding-horizontal" *ngIf="currentUser?.bio">
+      <p class="bio-copy">
+        "{{ currentUser?.bio }}"
+      </p>
+    </div>
+
+    <ion-list inset="true">
+      <ion-list-header>
+        <ion-label>Preferencias de la App</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-icon name="moon-outline" slot="start"></ion-icon>
+        <ion-label>Modo Oscuro</ion-label>
+        <ion-toggle slot="end"></ion-toggle>
+      </ion-item>
+      <ion-item button routerLink="/news">
+        <ion-icon name="notifications-outline" slot="start"></ion-icon>
+        <ion-label>Notificaciones</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <div class="seccion-cuenta ion-padding-horizontal">
+      <h3 class="titulo-cuenta">CUENTA</h3>
+      <ion-list inset="true" class="lista-cuenta">
+        <ion-item lines="none" button routerLink="/profile/academic">
+          <div class="caja-icono" slot="start">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h2>Informacion Academica</h2>
+            <p>Carne digital y registro</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="ion-padding action-buttons">
+      <ion-button expand="block" fill="outline" routerLink="/main">
+        Volver al Muro
+      </ion-button>
+
+      <ion-button expand="block" color="danger" (click)="cerrarSesion()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Cerrar Sesion
+      </ion-button>
+    </div>
+  </div>
+
+  @if (showingAvatarPreview) {
+    <div class="avatar-overlay" (click)="cerrarVistaAvatar()">
+      <div class="avatar-overlay-shell" (click)="$event.stopPropagation()">
+        <button class="avatar-modal-close" type="button" (click)="cerrarVistaAvatar()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+
+        <img
+          class="avatar-modal-image"
+          [src]="currentUser?.avatarUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'"
+          alt="Foto de perfil ampliada">
+      </div>
+    </div>
+  }
 </ion-content>

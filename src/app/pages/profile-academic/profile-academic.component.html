@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Informacion Academica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="academic-content">
+  <section class="academic-shell">
+    <h1>Completar Datos</h1>
+    <p>Edita aqui la informacion academica visible en tu perfil.</p>
+
+    <ion-list>
+      <ion-item>
+        <ion-input
+          label="Nombre Completo"
+          labelPlacement="stacked"
+          [(ngModel)]="userDataEdit.displayName"
+          placeholder="Tu nombre completo">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Correo Institucional"
+          labelPlacement="stacked"
+          [value]="userDataEdit.email"
+          readonly="true"
+          color="medium">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select
+          label="Facultad"
+          labelPlacement="stacked"
+          interface="popover"
+          [(ngModel)]="userDataEdit.faculty"
+          (ionChange)="onFacultyChange()"
+          placeholder="Selecciona una facultad">
+          @for (faculty of faculties; track faculty) {
+            <ion-select-option [value]="faculty">{{ faculty }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-select
+          label="Modalidad"
+          labelPlacement="stacked"
+          interface="popover"
+          [(ngModel)]="userDataEdit.studyMode"
+          (ionChange)="onStudyModeChange()"
+          [disabled]="!userDataEdit.faculty"
+          placeholder="Selecciona una modalidad">
+          @for (mode of availableStudyModes; track mode) {
+            <ion-select-option [value]="mode">{{ mode }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-select
+          label="Programa Academico"
+          labelPlacement="stacked"
+          interface="popover"
+          [(ngModel)]="userDataEdit.academicProgram"
+          [disabled]="!userDataEdit.studyMode"
+          placeholder="Selecciona un programa academico">
+          @for (program of availableAcademicPrograms; track program) {
+            <ion-select-option [value]="program">{{ program }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          type="number"
+          label="Semestre Actual"
+          labelPlacement="stacked"
+          [(ngModel)]="userDataEdit.semester"
+          min="1"
+          max="20"
+          (ngModelChange)="onSemesterInput($event)"
+          placeholder="Ej: 9">
+        </ion-input>
+      </ion-item>
+
+      @if (semesterError) {
+        <p class="field-error">{{ semesterError }}</p>
+      }
+
+      @if (!userDataEdit.faculty || !userDataEdit.studyMode || !userDataEdit.academicProgram) {
+        <ion-note class="field-help">
+          Selecciona primero facultad, luego modalidad y finalmente el programa academico.
+        </ion-note>
+      }
+
+      <ion-item>
+        <ion-textarea
+          label="Biografia o Intereses"
+          labelPlacement="stacked"
+          [(ngModel)]="userDataEdit.bio"
+          placeholder="Escribe algo sobre ti..."
+          [autoGrow]="true">
+        </ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" class="save-button" (click)="guardarCambios()" [disabled]="saving || !!semesterError">
+      {{ saving ? 'Guardando...' : 'Guardar Informacion' }}
+    </ion-button>
+  </section>
+</ion-content>

@@ -45,10 +45,24 @@ export const routes: Routes = [
       import('./pages/messages/messages.component').then((m) => m.MessagesComponent),
   },
   {
+    path: 'messages/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/chat-room/chat-room.component').then((m) => m.ChatRoomComponent),
+  },
+  {
     path: 'profile',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
+  },
+  {
+    path: 'profile/academic',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile-academic/profile-academic.component').then(
+        (m) => m.ProfileAcademicComponent,
+      ),
   },
   {
     path: 'chat',

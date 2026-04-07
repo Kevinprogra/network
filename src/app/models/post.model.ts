@@ -2,6 +2,7 @@ export interface Post {
   id?: string;
   authorId: string;
   authorName: string;
+  authorAvatarUrl?: string;
   authorRole: string;
   content: string;
   likesCount: number;

@@ -4,9 +4,12 @@
       <header class="card-header">
         <p class="eyebrow">Crear cuenta</p>
 
-        <div class="brand-mark" aria-hidden="true">
+        <div class="brand-mark logo-shell" aria-hidden="true">
           <div class="brand-glow"></div>
-          <ion-icon name="school-outline"></ion-icon>
+          <img
+            class="logo-image"
+            src="assets/login/icon.png"
+            alt="Logo SocializaUni" />
         </div>
 
         <p class="description">
@@ -55,12 +58,20 @@
             <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
             <ion-input
               id="register-password"
-              type="password"
+              [type]="showPassword ? 'text' : 'password'"
               name="password"
               [(ngModel)]="password"
               placeholder="••••••••"
               required>
             </ion-input>
+            <button
+              class="password-toggle"
+              slot="end"
+              type="button"
+              [attr.aria-label]="showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+              (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
           </ion-item>
         </div>
 
@@ -70,12 +81,20 @@
             <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
             <ion-input
               id="register-confirm-password"
-              type="password"
+              [type]="showConfirmPassword ? 'text' : 'password'"
               name="confirmPassword"
               [(ngModel)]="confirmPassword"
               placeholder="••••••••"
               required>
             </ion-input>
+            <button
+              class="password-toggle"
+              slot="end"
+              type="button"
+              [attr.aria-label]="showConfirmPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+              (click)="toggleConfirmPasswordVisibility()">
+              <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
           </ion-item>
         </div>
 

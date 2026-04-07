@@ -24,6 +24,7 @@
       <button class="menu-link" type="button" routerLink="/profile">
         <ion-icon name="person-circle-outline"></ion-icon>
         <span>Perfil</span>
+        
       </button>
       <button class="menu-link logout" type="button" (click)="logout()">
         <ion-icon name="send-outline"></ion-icon>
@@ -67,11 +68,33 @@
   <ion-content class="feed-content">
     <section class="composer-card">
       <div class="composer-top">
-        <ion-avatar class="avatar">
-          <div class="avatar-fallback">U</div>
+        <ion-avatar
+          class="avatar"
+          [class.developer-avatar]="(currentProfile$ | async)?.role === 'developer'">
+          @if (currentProfile$ | async; as currentProfile) {
+            @if (currentProfile.avatarUrl) {
+              <img
+                class="avatar-image"
+                [src]="currentProfile.avatarUrl"
+                [alt]="'Foto de ' + currentProfile.displayName" />
+            } @else {
+              <div class="avatar-fallback">{{ currentProfile.displayName.charAt(0) }}</div>
+            }
+          } @else {
+            <div class="avatar-fallback">U</div>
+          }
         </ion-avatar>
         <div>
-          <h2>¿Que quieres anunciar hoy?</h2>
+          <div class="name-badge-row">
+            <h2>¿Que quieres anunciar hoy?</h2>
+            @if (currentProfile$ | async; as currentProfile) {
+              @if (isDeveloperProfile(currentProfile)) {
+                <span class="role-badge developer-badge">Developer</span>
+              } @else if (isTeacherProfile(currentProfile)) {
+                <span class="role-badge teacher-badge">Profesor</span>
+              }
+            }
+          </div>
           <p>Publica en Facultad de Ingenieria</p>
         </div>
       </div>
@@ -113,18 +136,45 @@
         </div>
       </div>
 
-      @if (posts$ | async; as posts) {
-        @if (posts.length) {
-          @for (post of posts; track post.id) {
+      @if (postsVm$ | async; as postsVm) {
+        @if (postsVm.length) {
+          @for (item of postsVm; track item.post.id) {
             <article class="post-card">
               <div class="post-head">
                 <div class="identity">
-                  <ion-avatar class="avatar small">
-                    <div class="avatar-fallback">{{ post.authorName.charAt(0) }}</div>
+                  <ion-avatar
+                    class="avatar small"
+                    [class.developer-avatar]="isDeveloperPost(item.authorProfile)">
+                    @if (getAuthorAvatarUrl(item.post, item.authorProfile); as avatarUrl) {
+                      @if (avatarUrl) {
+                        <img
+                          class="avatar-image"
+                          [src]="avatarUrl"
+                          [alt]="'Foto de ' + item.post.authorName" />
+                      } @else {
+                        <div class="avatar-fallback">{{ item.post.authorName.charAt(0) }}</div>
+                      }
+                    } @else {
+                      <div class="avatar-fallback">{{ item.post.authorName.charAt(0) }}</div>
+                    }
                   </ion-avatar>
                   <div>
-                    <h4>{{ post.authorName }}</h4>
-                    <p>{{ post.authorRole }}</p>
+                    <div class="name-badge-row">
+                      <h4>{{ item.post.authorName }}</h4>
+                      @if (isDeveloperPost(item.authorProfile)) {
+                        <span class="role-badge developer-badge">Developer</span>
+                      } @else if (isTeacherPost(item.authorProfile)) {
+                        <span class="role-badge teacher-badge">Profesor</span>
+                      }
+                    </div>
+                    <p>
+                      {{ item.post.authorRole }}
+                      @if (getRelativeTimeLabel(item.post.createdAt); as relativeTime) {
+                        @if (relativeTime) {
+                          · {{ relativeTime }}
+                        }
+                      }
+                    </p>
                   </div>
                 </div>
                 <button class="icon-button tiny" type="button">
@@ -132,11 +182,11 @@
                 </button>
               </div>
 
-              <p class="post-copy">{{ post.content }}</p>
+              <p class="post-copy">{{ item.post.content }}</p>
 
               <div class="post-meta">
-                <span><ion-icon name="heart-outline"></ion-icon> {{ post.likesCount }}</span>
-                <span><ion-icon name="chatbubble-outline"></ion-icon> {{ post.commentsCount }}</span>
+                <span><ion-icon name="heart-outline"></ion-icon> {{ item.post.likesCount }}</span>
+                <span><ion-icon name="chatbubble-outline"></ion-icon> {{ item.post.commentsCount }}</span>
                 <span><ion-icon name="send-outline"></ion-icon> Compartir</span>
               </div>
             </article>
@@ -151,7 +201,14 @@
                   </ion-avatar>
                   <div>
                     <h4>{{ post.authorName }}</h4>
-                    <p>{{ post.authorRole }}</p>
+                    <p>
+                      {{ post.authorRole }}
+                      @if (getRelativeTimeLabel(post.createdAt); as relativeTime) {
+                        @if (relativeTime) {
+                          · {{ relativeTime }}
+                        }
+                      }
+                    </p>
                   </div>
                 </div>
                 <button class="icon-button tiny" type="button">

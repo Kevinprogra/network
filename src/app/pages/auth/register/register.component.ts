@@ -13,6 +13,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   arrowForwardOutline,
+  eyeOffOutline,
+  eyeOutline,
   lockClosedOutline,
   mailOutline,
   personOutline,
@@ -46,6 +48,8 @@ export class RegisterComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  showPassword = false;
+  showConfirmPassword = false;
   loading = false;
   errorMessage = '';
   infoMessage = '';
@@ -53,6 +57,8 @@ export class RegisterComponent {
   constructor() {
     addIcons({
       arrowForwardOutline,
+      eyeOffOutline,
+      eyeOutline,
       lockClosedOutline,
       mailOutline,
       personOutline,
@@ -85,5 +91,13 @@ export class RegisterComponent {
 
   goToLogin(): void {
     void this.router.navigate(['/login']);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }

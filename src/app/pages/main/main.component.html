@@ -1,18 +1,97 @@
-<ion-menu contentId="main-content">
-  <ion-header>
-    <app-header></app-header>
+<ion-content>
 
-  </ion-header>
-  <ion-content class="ion-padding">This is the menu content.</ion-content>
-</ion-menu>
-<div class="ion-page" id="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
-</div>
+  <!--aqui puse el header-->
+  <div class="header">
+    <h2 class="muro">⚡ SocializaUni</h2>
+    <ion-icon name="notifications-outline"></ion-icon>
+  </div>
+
+
+
+
+
+
+
+  <!-- hacer publ -->
+  <div class="create-post">
+
+    <div class="user-info">
+      <img [src]="currentUser.avatar">
+      <div>
+        <strong>{{ currentUser.name }}</strong>
+        <p>Publicar en: Facultad de ingeniería</p>
+      </div>
+    </div>
+
+
+    
+    <ion-textarea
+      [(ngModel)]="newPost"
+      placeholder="¿Qué quieres anunciar hoy?">
+    </ion-textarea>
+
+    <!-- preview imagen -->
+    <img *ngIf="selectedImage" [src]="selectedImage" class="preview">
+
+    <div class="actions">
+      <input type="file" hidden #fileInput (change)="onImageSelected($event)">
+
+      <ion-button fill="clear" (click)="fileInput.click()">
+        📷
+      </ion-button>
+
+      <ion-button (click)="createPost()">
+        Publicar
+      </ion-button>
+    </div>
+
+  </div>
+
+  <!-- noticia-->
+  <div *ngFor="let post of posts" class="post">
+
+    <!-- Usuario -->
+    <div class="post-header">
+      <img [src]="post.user.avatar">
+
+      <div>
+        <strong>{{ post.user.name }}</strong>
+        <span class="badge" *ngIf="post.user.role">
+          {{ post.user.role }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Contenido -->
+    <p>{{ post.content }}</p>
+
+    <img *ngIf="post.image" [src]="post.image" class="post-img">
+
+    <!-- Acciones -->
+    <div class="post-actions">
+      <button (click)="toggleLike(post)">
+        ❤️ {{ post.likes }}
+      </button>
+
+      <button (click)="post.showComments = !post.showComments">
+        💬 {{ post.comments.length }}
+      </button>
+    </div>
+
+    <!-- Comentarios -->
+    <div *ngIf="post.showComments" class="comments">
+
+      <div *ngFor="let c of post.comments">
+        <strong>{{ c.user.name }}</strong>: {{ c.text }}
+      </div>
+
+      <input #commentInput placeholder="Escribe un comentario...">
+      <button (click)="addComment(post, commentInput.value); commentInput.value=''">
+        Enviar
+      </button>
+
+    </div>
+
+  </div>
+
+</ion-content>

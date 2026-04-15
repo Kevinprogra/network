@@ -1,11 +1,36 @@
 import { Component } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { Platform } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet],
+  styleUrls: ['app.component.scss'],
+  standalone: true,
+   imports: [IonicModule],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(
+    private platform: Platform
+  ) {
+    this.platform.ready().then(() => { this.configureStatusBar(); });
+  }
+
+  //Agregar statusBar
+  async configureStatusBar() {
+    if(!Capacitor.isNativePlatform() ) return
+
+    try {
+      await StatusBar.setStyle({ style: Style.Dark }); 
+      await StatusBar.setOverlaysWebView({ overlay: false });
+      await StatusBar.setBackgroundColor({ color: '#000000' });
+    
+    } catch (error) {
+      console.error('Error configurando StatusBar:', error)
+    }
+    
+  }
+
 }

@@ -1,4 +1,18 @@
 import {
+  e as e4
+} from "./chunk-GNWGUSZ7.js";
+import {
+  o as o5
+} from "./chunk-VTS6MUXF.js";
+import {
+  t as t6
+} from "./chunk-EEEAY7BB.js";
+import {
+  i as i5,
+  r as r3,
+  t as t5
+} from "./chunk-VHRMAIPY.js";
+import {
   a as a2,
   e as e3,
   f as f4,
@@ -9,9 +23,6 @@ import {
   p as p3,
   t as t4
 } from "./chunk-6COVZVAL.js";
-import {
-  e as e4
-} from "./chunk-GNWGUSZ7.js";
 import {
   $,
   A,
@@ -76,13 +87,13 @@ import {
   t2 as t3,
   x as x2,
   y as y2
-} from "./chunk-BYAHFXMY.js";
+} from "./chunk-VD62D3MC.js";
 import {
   l as l2
-} from "./chunk-RWQ6Z4M2.js";
+} from "./chunk-ZS7ACF4K.js";
 import {
   i as i2
-} from "./chunk-VX3I4KIN.js";
+} from "./chunk-LHCHRSMZ.js";
 import {
   B,
   D,
@@ -93,25 +104,7 @@ import {
   r,
   s as s2,
   v as v2
-} from "./chunk-RO4IAZ7J.js";
-import {
-  o as o3
-} from "./chunk-URFTZN5C.js";
-import {
-  o as o5
-} from "./chunk-VTS6MUXF.js";
-import {
-  h,
-  s as s3
-} from "./chunk-TCEW23F2.js";
-import {
-  t as t6
-} from "./chunk-EEEAY7BB.js";
-import {
-  i as i5,
-  r as r3,
-  t as t5
-} from "./chunk-VHRMAIPY.js";
+} from "./chunk-2O6WAXUO.js";
 import {
   T,
   _,
@@ -133,6 +126,17 @@ import {
   y
 } from "./chunk-VGZ3Y7MJ.js";
 import {
+  h,
+  s as s3
+} from "./chunk-TCEW23F2.js";
+import {
+  o as o3
+} from "./chunk-ZR6Q7TUJ.js";
+import {
+  d,
+  o
+} from "./chunk-WH2RCB7C.js";
+import {
   Ct,
   Dn,
   I,
@@ -149,23 +153,19 @@ import {
   u
 } from "./chunk-3B5L6JJ3.js";
 import {
-  d,
-  o
-} from "./chunk-WH2RCB7C.js";
-import {
   ActivatedRoute,
   Router
-} from "./chunk-SXUZIL5L.js";
-import "./chunk-PXL6BX2C.js";
+} from "./chunk-HMBNPUDT.js";
+import "./chunk-F3BJAXJV.js";
 import {
   NG_VALUE_ACCESSOR
-} from "./chunk-M2TL4YQZ.js";
+} from "./chunk-TTMYTDMU.js";
 import {
   CommonModule,
   Location,
   NgIf,
   NgTemplateOutlet
-} from "./chunk-WZJ53ASN.js";
+} from "./chunk-YWXV2NGG.js";
 import {
   APP_INITIALIZER,
   Attribute,
@@ -516,7 +516,7 @@ var b3 = Dn(class extends I {
       const t14 = () => {
         this.gestureOrAnimationInProgress = true, this.swipeHandler && this.swipeHandler.onStart();
       };
-      this.gesture = (yield import("./p-Cz5nLPGT-4SO2HBO3.js")).createSwipeBackGesture(this.el, (() => !this.gestureOrAnimationInProgress && !!this.swipeHandler && this.swipeHandler.canStart()), (() => t14()), ((t15) => {
+      this.gesture = (yield import("./p-Cz5nLPGT-SUDRTXR5.js")).createSwipeBackGesture(this.el, (() => !this.gestureOrAnimationInProgress && !!this.swipeHandler && this.swipeHandler.canStart()), (() => t14()), ((t15) => {
         var i13;
         return null === (i13 = this.ani) || void 0 === i13 ? void 0 : i13.progressStep(t15);
       }), ((t15, i13, s19) => {
@@ -2297,11 +2297,11 @@ var d6 = Dn(class extends I {
   componentDidLoad() {
     this.rIC((() => __async(this, null, function* () {
       const t14 = s4(window, "hybrid");
-      if (n.getBoolean("_testing") || import("./p-BgwEQWW6-RRJKPZBO.js").then(((t15) => t15.startTapClick(n))), n.getBoolean("statusTap", t14) && import("./p-CneGxKsZ-UCIFPERE.js").then(((t15) => t15.startStatusTap())), n.getBoolean("inputShims", m6())) {
+      if (n.getBoolean("_testing") || import("./p-BgwEQWW6-PEFCX64A.js").then(((t15) => t15.startTapClick(n))), n.getBoolean("statusTap", t14) && import("./p-CneGxKsZ-UCIFPERE.js").then(((t15) => t15.startStatusTap())), n.getBoolean("inputShims", m6())) {
         const t15 = s4(window, "ios") ? "ios" : "android";
-        import("./p-Cwv-vmkN-Z2FD6I5S.js").then(((e15) => e15.startInputShims(n, t15)));
+        import("./p-Cwv-vmkN-D3FKHNTA.js").then(((e15) => e15.startInputShims(n, t15)));
       }
-      const e14 = yield import("./p-vEbVo2hO-3CWHE2OB.js"), i13 = t14 || o3();
+      const e14 = yield import("./p-vEbVo2hO-FIFH3Y4Y.js"), i13 = t14 || o3();
       n.getBoolean("hardwareBackButton", i13) ? e14.startHardwareBackButton() : (o3() && u("[ion-app] - experimentalCloseWatcher was set to `true`, but hardwareBackButton was set to `false`. Both config options must be `true` for the Close Watcher API to be used."), e14.blockHardwareBackButton()), "undefined" != typeof window && import("./p-D6Ynv7Xh-ZWOYARH5.js").then(((t15) => t15.startKeyboardAssist(window))), import("./p-BmVRXR1y-VDINOXZS.js").then(((t15) => this.focusVisible = t15.startFocusVisible()));
     })));
   }
@@ -7137,7 +7137,7 @@ var k7 = Dn(class extends I {
   }
   componentDidLoad() {
     return __async(this, null, function* () {
-      this.didLoad = true, this.rootChanged(), this.gesture = (yield import("./p-Cz5nLPGT-4SO2HBO3.js")).createSwipeBackGesture(this.el, this.canStart.bind(this), this.onStart.bind(this), this.onMove.bind(this), this.onEnd.bind(this)), this.swipeGestureChanged();
+      this.didLoad = true, this.rootChanged(), this.gesture = (yield import("./p-Cz5nLPGT-SUDRTXR5.js")).createSwipeBackGesture(this.el, this.canStart.bind(this), this.onStart.bind(this), this.onMove.bind(this), this.onEnd.bind(this)), this.swipeGestureChanged();
     });
   }
   connectedCallback() {

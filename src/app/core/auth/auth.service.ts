@@ -40,6 +40,8 @@ export class AuthService {
       displayName,
       bio: '',
       avatarUrl: '',
+      faculty: '',
+      studyMode: '',
       academicProgram: '',
       interests: [],
       createdAt: serverTimestamp(),

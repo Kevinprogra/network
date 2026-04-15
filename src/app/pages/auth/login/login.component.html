@@ -4,9 +4,11 @@
       <header class="card-header">
         <p class="eyebrow">Bienvenido</p>
 
-        <div class="brand-mark" aria-hidden="true">
-          <div class="brand-glow"></div>
-          <ion-icon name="school-outline"></ion-icon>
+        <div class="logo-shell">
+          <img
+            class="logo-image"
+            src="assets/login/icon.png"
+            alt="Logo SocializaUni" />
         </div>
 
         <p class="description">
@@ -47,12 +49,20 @@
             <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
             <ion-input
               id="login-password"
-              type="password"
+              [type]="showPassword ? 'text' : 'password'"
               name="password"
               [(ngModel)]="password"
               placeholder="••••••••"
               required>
             </ion-input>
+            <button
+              class="password-toggle"
+              slot="end"
+              type="button"
+              [attr.aria-label]="showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+              (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
           </ion-item>
         </div>
 

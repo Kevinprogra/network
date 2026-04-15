@@ -1,18 +1,232 @@
-<ion-menu contentId="main-content">
+<ion-menu contentId="main-content" menuId="main-menu">
   <ion-header>
     <app-header></app-header>
-
   </ion-header>
-  <ion-content class="ion-padding">This is the menu content.</ion-content>
+
+  <ion-content class="menu-content">
+    <div class="menu-links">
+      <button class="menu-link active" type="button" routerLink="/main">
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Muro</span>
+      </button>
+      <button class="menu-link" type="button" routerLink="/news">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span>Noticias</span>
+      </button>
+      <button class="menu-link" type="button" routerLink="/events">
+        <ion-icon name="bookmark-outline"></ion-icon>
+        <span>Eventos</span>
+      </button>
+      <button class="menu-link" type="button" routerLink="/messages">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+        <span>Mensajes</span>
+      </button>
+      <button class="menu-link" type="button" routerLink="/profile">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+        
+      </button>
+      <button class="menu-link logout" type="button" (click)="logout()">
+        <ion-icon name="send-outline"></ion-icon>
+        <span>Salir</span>
+      </button>
+    </div>
+  </ion-content>
 </ion-menu>
+
 <div class="ion-page" id="main-content">
-  <ion-header>
+  <ion-header class="feed-header">
     <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title>Menu</ion-title>
+      <div class="toolbar-content">
+        <div class="title-wrap">
+          <ion-buttons>
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+
+          <div class="title-badge">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+
+          <div>
+            <h1>Muro</h1>
+            <p>Gestion academica</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-button" type="button">
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
+          <button class="icon-button" type="button" routerLink="/news">
+            <ion-icon name="notifications-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+
+  <ion-content class="feed-content">
+    <section class="composer-card">
+      <div class="composer-top">
+        <ion-avatar
+          class="avatar"
+          [class.developer-avatar]="(currentProfile$ | async)?.role === 'developer'">
+          @if (currentProfile$ | async; as currentProfile) {
+            @if (currentProfile.avatarUrl) {
+              <img
+                class="avatar-image"
+                [src]="currentProfile.avatarUrl"
+                [alt]="'Foto de ' + currentProfile.displayName" />
+            } @else {
+              <div class="avatar-fallback">{{ currentProfile.displayName.charAt(0) }}</div>
+            }
+          } @else {
+            <div class="avatar-fallback">U</div>
+          }
+        </ion-avatar>
+        <div>
+          <div class="name-badge-row">
+            <h2>¿Que quieres anunciar hoy?</h2>
+            @if (currentProfile$ | async; as currentProfile) {
+              @if (isDeveloperProfile(currentProfile)) {
+                <span class="role-badge developer-badge">Developer</span>
+              } @else if (isTeacherProfile(currentProfile)) {
+                <span class="role-badge teacher-badge">Profesor</span>
+              }
+            }
+          </div>
+          <p>Publica en Facultad de Ingenieria</p>
+        </div>
+      </div>
+
+      <textarea
+        class="composer-input"
+        name="postContent"
+        [(ngModel)]="postContent"
+        placeholder="Escribe un aviso academico o una actualizacion para tus estudiantes...">
+      </textarea>
+
+      @if (publishError) {
+        <p class="publish-error">{{ publishError }}</p>
+      }
+
+      <div class="composer-actions">
+        <div class="quick-actions">
+          <button type="button">
+            <ion-icon name="bookmark-outline"></ion-icon>
+          </button>
+          <button type="button">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </button>
+          <button type="button">
+            <ion-icon name="chatbubble-outline"></ion-icon>
+          </button>
+        </div>
+        <ion-button size="small" (click)="publishPost()" [disabled]="isPublishing">
+          {{ isPublishing ? 'Publicando...' : 'Publicar' }}
+        </ion-button>
+      </div>
+    </section>
+
+    <section class="feed-section">
+      <div class="section-header">
+        <div>
+          <p class="section-kicker">Recientes en campus</p>
+          <h3>Actividad academica</h3>
+        </div>
+      </div>
+
+      @if (postsVm$ | async; as postsVm) {
+        @if (postsVm.length) {
+          @for (item of postsVm; track item.post.id) {
+            <article class="post-card">
+              <div class="post-head">
+                <div class="identity">
+                  <ion-avatar
+                    class="avatar small"
+                    [class.developer-avatar]="isDeveloperPost(item.authorProfile)">
+                    @if (getAuthorAvatarUrl(item.post, item.authorProfile); as avatarUrl) {
+                      @if (avatarUrl) {
+                        <img
+                          class="avatar-image"
+                          [src]="avatarUrl"
+                          [alt]="'Foto de ' + item.post.authorName" />
+                      } @else {
+                        <div class="avatar-fallback">{{ item.post.authorName.charAt(0) }}</div>
+                      }
+                    } @else {
+                      <div class="avatar-fallback">{{ item.post.authorName.charAt(0) }}</div>
+                    }
+                  </ion-avatar>
+                  <div>
+                    <div class="name-badge-row">
+                      <h4>{{ item.post.authorName }}</h4>
+                      @if (isDeveloperPost(item.authorProfile)) {
+                        <span class="role-badge developer-badge">Developer</span>
+                      } @else if (isTeacherPost(item.authorProfile)) {
+                        <span class="role-badge teacher-badge">Profesor</span>
+                      }
+                    </div>
+                    <p>
+                      {{ item.post.authorRole }}
+                      @if (getRelativeTimeLabel(item.post.createdAt); as relativeTime) {
+                        @if (relativeTime) {
+                          · {{ relativeTime }}
+                        }
+                      }
+                    </p>
+                  </div>
+                </div>
+                <button class="icon-button tiny" type="button">
+                  <ion-icon name="ellipsis-horizontal"></ion-icon>
+                </button>
+              </div>
+
+              <p class="post-copy">{{ item.post.content }}</p>
+
+              <div class="post-meta">
+                <span><ion-icon name="heart-outline"></ion-icon> {{ item.post.likesCount }}</span>
+                <span><ion-icon name="chatbubble-outline"></ion-icon> {{ item.post.commentsCount }}</span>
+                <span><ion-icon name="send-outline"></ion-icon> Compartir</span>
+              </div>
+            </article>
+          }
+        } @else {
+          @for (post of fallbackPosts; track post.id) {
+            <article class="post-card">
+              <div class="post-head">
+                <div class="identity">
+                  <ion-avatar class="avatar small">
+                    <div class="avatar-fallback">{{ post.authorName.charAt(0) }}</div>
+                  </ion-avatar>
+                  <div>
+                    <h4>{{ post.authorName }}</h4>
+                    <p>
+                      {{ post.authorRole }}
+                      @if (getRelativeTimeLabel(post.createdAt); as relativeTime) {
+                        @if (relativeTime) {
+                          · {{ relativeTime }}
+                        }
+                      }
+                    </p>
+                  </div>
+                </div>
+                <button class="icon-button tiny" type="button">
+                  <ion-icon name="ellipsis-horizontal"></ion-icon>
+                </button>
+              </div>
+
+              <p class="post-copy">{{ post.content }}</p>
+
+              <div class="post-meta">
+                <span><ion-icon name="heart-outline"></ion-icon> {{ post.likesCount }}</span>
+                <span><ion-icon name="chatbubble-outline"></ion-icon> {{ post.commentsCount }}</span>
+                <span><ion-icon name="send-outline"></ion-icon> Compartir</span>
+              </div>
+            </article>
+          }
+        }
+      }
+    </section>
+  </ion-content>
 </div>

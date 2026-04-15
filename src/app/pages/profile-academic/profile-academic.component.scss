@@ -1,0 +1,59 @@
+.academic-content {
+  --background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+  --padding: 24px;
+}
+
+.academic-shell {
+  display: grid;
+  gap: 16px;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+h1 {
+  color: #1f2b37;
+  font-size: 1.3rem;
+}
+
+p {
+  color: #6d7986;
+  line-height: 1.5;
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --border-radius: 18px;
+  --background: rgba(255, 255, 255, 0.95);
+  --color: #22303d;
+  margin-bottom: 12px;
+}
+
+ion-input,
+ion-select,
+ion-textarea {
+  --color: #22303d;
+  --placeholder-color: #8a96a3;
+}
+
+.field-error {
+  margin-top: -4px;
+  color: #d25a5a;
+  font-size: 0.82rem;
+}
+
+.field-help {
+  display: block;
+  margin-top: -4px;
+  color: #5f7081;
+  font-size: 0.82rem;
+}
+
+.save-button {
+  margin-top: 8px;
+}

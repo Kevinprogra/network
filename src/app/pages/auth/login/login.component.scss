@@ -184,6 +184,19 @@
   font-size: 1.1rem;
 }
 
+.password-toggle {
+  border: 0;
+  padding: 4px;
+  background: transparent;
+  color: #6d7a87;
+  display: grid;
+  place-items: center;
+}
+
+.password-toggle ion-icon {
+  font-size: 1.15rem;
+}
+
 ion-input {
   --color: #25323e;
   --placeholder-color: #97a1ab;
@@ -262,3 +275,20 @@ ion-input {
     font-size: 1.2rem;
   }
 }
+
+.logo-shell {
+  width: 200px;
+  height: 200px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  padding: 1px;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+

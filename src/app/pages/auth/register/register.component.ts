@@ -1,36 +1,103 @@
-import { Component } from '@angular/core';
-import { FormsModule} from '@angular/forms';
-import { IonicModule, } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
- 
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonSpinner,
+  IonText,
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  arrowForwardOutline,
+  eyeOffOutline,
+  eyeOutline,
+  lockClosedOutline,
+  mailOutline,
+  personOutline,
+  schoolOutline,
+} from 'ionicons/icons';
+
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [IonicModule, FormsModule,RouterModule]
+  imports: [
+    FormsModule,
+    RouterModule,
+    IonButton,
+    IonContent,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonSpinner,
+    IonText,
+  ],
 })
-
-
 export class RegisterComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  Username: string = '';
-  Password: string = '';
-  ConfirmPassword: string = '';
+  displayName = '';
+  email = '';
+  password = '';
+  confirmPassword = '';
+  showPassword = false;
+  showConfirmPassword = false;
+  loading = false;
+  errorMessage = '';
+  infoMessage = '';
 
-
-  captura() {
-    console.log('Register:', this.Username, this.Password, this.ConfirmPassword);
+  constructor() {
+    addIcons({
+      arrowForwardOutline,
+      eyeOffOutline,
+      eyeOutline,
+      lockClosedOutline,
+      mailOutline,
+      personOutline,
+      schoolOutline,
+    });
   }
 
+  async submit(): Promise<void> {
+    this.errorMessage = '';
+    this.infoMessage = '';
 
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Las contrasenas no coinciden.';
+      return;
+    }
 
-  constructor( private router: Router) { }
+    this.loading = true;
 
-  
+    try {
+      await this.authService.register(this.email, this.password, this.displayName);
+      this.infoMessage = 'Cuenta creada correctamente.';
+      await this.router.navigateByUrl('/main');
+    } catch (error) {
+      this.errorMessage = this.authService.getErrorMessage(error);
+      console.error(error);
+    } finally {
+      this.loading = false;
+    }
+  }
 
+  goToLogin(): void {
+    void this.router.navigate(['/login']);
+  }
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 }

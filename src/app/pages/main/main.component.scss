@@ -31,6 +31,80 @@
   color: #d25a5a;
 }
 
+
+.comentario {
+  color: #575151;
+  background-color: #ffffff;
+  border-radius: 5px;
+  font-family: "Times New Roman", serif;
+
+  
+}
+
+.name{
+  color: #f8f8fa;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background-color: #243ac9;
+  border-radius: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  word-spacing: 20px;
+   display: flex;
+  justify-content: center; 
+  align-items: center;     
+  height: 18px;
+  width: 60px;
+}
+
+
+
+.publicar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f5f6f8;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* INPUT */
+.publicar input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.publicar input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+}
+
+.publicar button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  background: #4a90e2;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.publicar button:hover {
+  background: #357abd;
+}
+
+.publicar button:active {
+  transform: scale(0.95);
+}
+
 .feed-header {
   ion-toolbar {
     --background: rgba(248, 250, 252, 0.88);

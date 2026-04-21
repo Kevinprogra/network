@@ -9,6 +9,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { firebaseConfig } from './app/core/config/firebase.config';
+import { provideHttpClient } from '@angular/common/http';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -19,5 +20,6 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideHttpClient(),
   ],
 });

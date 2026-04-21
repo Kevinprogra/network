@@ -29,7 +29,7 @@ export const routes: Routes = [
   },
   {
     path: 'news',
-    canActivate: [authGuard],
+    canActivate: [],
     loadComponent: () => import('./pages/news/news.component').then((m) => m.NewsComponent),
   },
   {

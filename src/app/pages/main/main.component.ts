@@ -35,6 +35,9 @@ import { PostsService } from '../../core/services/posts.service';
 import { Post } from '../../models/post.model';
 import { UserProfile } from '../../models/user-profile.model';
 import { ProfileService } from '../../core/services/profile.service';
+import { CommentService } from '../../core/services/comment.service';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-main',
@@ -55,12 +58,14 @@ import { ProfileService } from '../../core/services/profile.service';
     IonMenu,
     IonMenuButton,
     IonToolbar,
+    CommonModule,
   ],
 })
 export class MainComponent {
   private readonly authService = inject(AuthService);
   private readonly postsService = inject(PostsService);
   private readonly profileService = inject(ProfileService);
+  private commentService = inject(CommentService);
 
   protected readonly posts$ = this.postsService.getFeed();
   protected readonly allProfiles$ = this.profileService.getAllProfiles();
@@ -105,6 +110,72 @@ export class MainComponent {
       sendOutline,
     });
   }
+
+
+  commentsMap: { [postId: string]: any[] } = {};
+
+
+
+
+
+loadComments(postId: string) {
+  console.log('resivir usuario resteandooo', postId);
+
+  this.commentService.getComments(postId)
+    .subscribe((data) => {
+      console.log('probando entrada comentarios kkkk', data);
+
+      this.commentsMap[postId] = data; 
+    });
+}
+
+
+
+
+
+  activeCommentPostId: string | null = null;
+newComment: string = '';
+
+toggleComments(postId: string) {
+  if (this.activeCommentPostId === postId) {
+    this.activeCommentPostId = null;
+    return;
+  }
+
+  this.activeCommentPostId = postId;
+
+  if (this.commentsMap[postId]) return;
+
+  this.postsService.getComments(postId).subscribe((comments) => {
+    this.commentsMap[postId] = comments;
+  });
+}
+
+
+
+
+
+
+
+
+
+
+async addComment(postId: string) {
+  if (!this.newComment.trim()) return;
+
+  console.log('📝 Comentario:', this.newComment);
+  console.log('📌 Post:', postId);
+
+  try {
+    await this.postsService.addComment(postId, this.newComment);
+    this.newComment = '';
+  } catch (error) {
+    console.error('❌ Error al guardar comentario:', error);
+  }
+}
+
+
+  
 
   async logout(): Promise<void> {
     await this.authService.logout();

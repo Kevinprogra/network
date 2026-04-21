@@ -1,0 +1,180 @@
+<ion-header class="messages-header">
+  <ion-toolbar>
+    <div class="toolbar-shell">
+      <div>
+        <p class="eyebrow">Comunicacion academica</p>
+        <h1>Mensajes</h1>
+      </div>
+
+      <div class="toolbar-actions">
+        <button class="header-icon" type="button" aria-label="Buscar">
+          <ion-icon name="search-outline"></ion-icon>
+        </button>
+        <button class="header-icon" type="button" aria-label="Nuevo mensaje" (click)="abrirNuevoMensaje()">
+          <ion-icon name="add-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="messages-content">
+  <div class="messages-shell">
+    <div class="back-row">
+      <ion-button fill="clear" routerLink="/main" class="back-button">
+        Volver al muro
+      </ion-button>
+    </div>
+
+    <ion-searchbar
+      class="messages-search"
+      [(ngModel)]="searchTerm"
+      placeholder="Buscar conversaciones"
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <section class="conversation-list">
+      @if (conversations$ | async; as conversations) {
+        @if (conversations.length) {
+          @for (conversation of filterConversations(conversations); track conversation.id) {
+            <button class="conversation-item" type="button" [routerLink]="['/messages', conversation.id]">
+              <div class="conversation-avatar-wrap">
+                <ion-avatar
+                  class="conversation-avatar"
+                  [class.developer-avatar]="conversation.isDeveloper">
+                  <img [src]="conversation.avatarUrl" [alt]="'Foto de ' + conversation.name" />
+                </ion-avatar>
+                @if (conversation.online) {
+                  <span class="online-dot"></span>
+                }
+              </div>
+
+                <div class="conversation-body">
+                  <div class="conversation-topline">
+                    <div>
+                      <div class="name-badge-row">
+                        <h2>{{ conversation.name }}</h2>
+                        @if (conversation.isDeveloper) {
+                          <span class="role-badge developer-badge">Developer</span>
+                        } @else if (conversation.isTeacher) {
+                          <span class="role-badge teacher-badge">Profesor</span>
+                        }
+                      </div>
+                      <p class="conversation-role">{{ conversation.role }}</p>
+                    </div>
+                  <span class="conversation-time">{{ conversation.timeLabel }}</span>
+                </div>
+
+                <div class="conversation-bottomline">
+                  <p class="conversation-message">{{ conversation.lastMessage }}</p>
+                  @if (conversation.unreadCount) {
+                    <ion-badge color="primary">{{ conversation.unreadCount }}</ion-badge>
+                  }
+                </div>
+              </div>
+            </button>
+          }
+        } @else {
+          @for (conversation of filteredConversations; track conversation.id) {
+            <button class="conversation-item" type="button" [routerLink]="['/messages', conversation.id]">
+              <div class="conversation-avatar-wrap">
+                <ion-avatar
+                  class="conversation-avatar"
+                  [class.developer-avatar]="conversation.isDeveloper">
+                  <img [src]="conversation.avatarUrl" [alt]="'Foto de ' + conversation.name" />
+                </ion-avatar>
+                @if (conversation.online) {
+                  <span class="online-dot"></span>
+                }
+              </div>
+
+                <div class="conversation-body">
+                  <div class="conversation-topline">
+                    <div>
+                      <div class="name-badge-row">
+                        <h2>{{ conversation.name }}</h2>
+                        @if (conversation.isDeveloper) {
+                          <span class="role-badge developer-badge">Developer</span>
+                        } @else if (conversation.isTeacher) {
+                          <span class="role-badge teacher-badge">Profesor</span>
+                        }
+                      </div>
+                      <p class="conversation-role">{{ conversation.role }}</p>
+                    </div>
+                  <span class="conversation-time">{{ conversation.timeLabel }}</span>
+                </div>
+
+                <div class="conversation-bottomline">
+                  <p class="conversation-message">{{ conversation.lastMessage }}</p>
+                  @if (conversation.unreadCount) {
+                    <ion-badge color="primary">{{ conversation.unreadCount }}</ion-badge>
+                  }
+                </div>
+              </div>
+            </button>
+          }
+        }
+      }
+    </section>
+
+    <section class="messages-empty-cta">
+      <div class="messages-empty-icon">
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      </div>
+      <h3>¿Buscas a alguien?</h3>
+      <p>Inicia un nuevo chat con tus profesores o companeros de clase.</p>
+      <ion-button shape="round" (click)="abrirNuevoMensaje()">Nuevo Mensaje</ion-button>
+    </section>
+  </div>
+
+  @if (showingNewMessageSheet) {
+    <div class="new-message-overlay" (click)="cerrarNuevoMensaje()">
+      <section class="new-message-sheet" (click)="$event.stopPropagation()">
+        <div class="sheet-header">
+          <div>
+            <p class="sheet-kicker">Mensajeria</p>
+            <h2>Nuevo mensaje</h2>
+          </div>
+          <button class="sheet-close" type="button" (click)="cerrarNuevoMensaje()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+
+        <ion-searchbar
+          class="contact-search"
+          [(ngModel)]="contactSearchTerm"
+          placeholder="Buscar por nombre o programa">
+        </ion-searchbar>
+
+        @if (availableProfiles$ | async; as profiles) {
+          <div class="contact-list">
+            @for (profile of filterProfiles(profiles); track profile.uid) {
+              <button
+                class="contact-item"
+                type="button"
+                [disabled]="creatingConversation"
+                (click)="iniciarConversacion(profile)">
+                <ion-avatar
+                  class="contact-avatar"
+                  [class.developer-avatar]="profile.role === 'developer'">
+                  <img
+                    [src]="profile.avatarUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'"
+                    [alt]="'Foto de ' + profile.displayName" />
+                </ion-avatar>
+
+                <div class="contact-copy">
+                  <h3>{{ profile.displayName }}</h3>
+                  <p>{{ profile.academicProgram || profile.role || profile.email }}</p>
+                </div>
+              </button>
+            } @empty {
+              <div class="contact-empty">
+                <p>No se encontraron usuarios disponibles.</p>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    </div>
+  }
+</ion-content>

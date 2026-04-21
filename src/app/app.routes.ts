@@ -1,34 +1,82 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './core/auth/auth-guard';
+import { publicGuard } from './core/auth/public.guard';
+
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./pages/auth/login/login.component').then((m) => m.LoginComponent),
+    canActivate: [publicGuard],
+    loadComponent: () =>
+      import('./pages/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'register',
-    loadComponent: () => import('./pages/auth/register/register.component').then((m) => m.RegisterComponent),
+    canActivate: [publicGuard],
+    loadComponent: () =>
+      import('./pages/auth/register/register.component').then((m) => m.RegisterComponent),
   },
   {
-    path: 'main',
-    loadComponent: () => import('./pages/main/main.component').then((m) => m.MainComponent),
-  },
-  {
-    path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage),
-    // CONTENEDOR MAESTRO (Layout Shell): 
-  // Todas las rutas dentro de 'children' heredan el Header Compartido y la barra de Tabs inferior.
-    children: [
-      {
-        path: 'perfil',
-        loadComponent: () => import('./pages/perfil/perfil.page').then(m => m.PerfilPage)
-      }
-    ]
-  },
-  {
-    // Dejamos un solo redireccionamiento base. Por ahora, que te lleve directo a tu maquetación.
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
-  }
+  },
+  {
+    path: 'main',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/main/main.component').then((m) => m.MainComponent),
+  },
+  {
+    path: 'news',
+    canActivate: [],
+    loadComponent: () => import('./pages/news/news.component').then((m) => m.NewsComponent),
+  },
+  {
+    path: 'events',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/events/events.component').then((m) => m.EventsComponent),
+  },
+  {
+    path: 'messages',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/messages/messages.component').then((m) => m.MessagesComponent),
+  },
+  {
+    path: 'messages/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/chat-room/chat-room.component').then((m) => m.ChatRoomComponent),
+  },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
+  },
+  {
+    path: 'profile/academic',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile-academic/profile-academic.component').then(
+        (m) => m.ProfileAcademicComponent,
+      ),
+  },
+  {
+    path: 'chat',
+    redirectTo: 'messages',
+    pathMatch: 'full',
+  },
+  {
+    path: 'notifications',
+    redirectTo: 'news',
+    pathMatch: 'full',
+  },
+  {
+    path: 'header',
+    loadComponent: () =>
+      import('./core/header/header.component').then((m) => m.HeaderComponent),
+  },
 ];

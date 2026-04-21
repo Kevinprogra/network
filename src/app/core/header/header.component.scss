@@ -1,0 +1,30 @@
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: #7b8794;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  color: #1f2b36;
+  font-size: 1rem;
+}
+
+.logout-button {
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #edf4ff;
+  color: #3e83f7;
+  font-weight: 700;
+}

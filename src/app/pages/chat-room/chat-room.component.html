@@ -1,0 +1,89 @@
+<ion-header class="chat-room-header">
+  <ion-toolbar>
+    <div class="chat-toolbar">
+      <div class="chat-toolbar-left">
+        <ion-buttons>
+          <ion-back-button defaultHref="/messages"></ion-back-button>
+        </ion-buttons>
+
+        @if (vm$ | async; as vm) {
+          <ion-avatar
+            class="chat-avatar"
+            [class.developer-avatar]="isDeveloperConversation(vm.otherProfile)">
+            <img
+              [src]="getConversationAvatar(vm.conversation, vm.otherProfile)"
+              [alt]="'Foto de ' + getConversationName(vm.conversation, vm.otherProfile)" />
+          </ion-avatar>
+
+          <div class="chat-title">
+            <div class="name-badge-row">
+              <h1>{{ getConversationName(vm.conversation, vm.otherProfile) }}</h1>
+              @if (isDeveloperConversation(vm.otherProfile)) {
+                <span class="role-badge developer-badge">Developer</span>
+              } @else if (isTeacherConversation(vm.otherProfile)) {
+                <span class="role-badge teacher-badge">Profesor</span>
+              }
+            </div>
+            <p>{{ getConversationRole(vm.conversation, vm.otherProfile) }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-room-content">
+  <div class="chat-room-shell">
+    @if (vm$ | async; as vm) {
+      @if (vm.messages.length) {
+        <section class="message-list">
+          @for (message of vm.messages; track message.id) {
+            <article class="message-row" [class.own]="isOwnMessage(message)">
+              <div class="message-bubble">
+                <p>{{ message.text }}</p>
+              </div>
+            </article>
+          }
+        </section>
+      } @else {
+        <section class="message-list">
+          @for (message of fallbackMessages; track message.id) {
+            <article class="message-row" [class.own]="isOwnMessage(message)">
+              <div class="message-bubble">
+                <p>{{ message.text }}</p>
+              </div>
+            </article>
+          }
+        </section>
+      }
+    } @else {
+      <div class="chat-loading">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    }
+  </div>
+</ion-content>
+
+<ion-footer class="chat-room-footer">
+  @if (conversationId$ | async; as conversationId) {
+    <ion-toolbar>
+      <div class="composer-shell">
+        <ion-input
+          class="chat-input"
+          [(ngModel)]="messageText"
+          placeholder="Escribe un mensaje...">
+        </ion-input>
+        <ion-button
+          class="send-button"
+          shape="round"
+          [disabled]="sending || !messageText.trim() || !conversationId"
+          (click)="sendMessage(conversationId)">
+          <ion-icon name="send-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+      @if (sendError) {
+        <p class="send-error">{{ sendError }}</p>
+      }
+    </ion-toolbar>
+  }
+</ion-footer>

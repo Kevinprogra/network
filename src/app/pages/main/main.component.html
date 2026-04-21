@@ -1,18 +1,191 @@
-<ion-menu contentId="main-content">
+<ion-menu contentId="main-content" menuId="main-menu">
   <ion-header>
     <app-header></app-header>
-
   </ion-header>
-  <ion-content class="ion-padding">This is the menu content.</ion-content>
+
+  <ion-content class="menu-content">
+    <div class="menu-links">
+      <button class="menu-link active" routerLink="/main">
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Muro</span>
+      </button>
+
+      <button class="menu-link" routerLink="/news">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span>Noticias</span>
+      </button>
+
+      <button class="menu-link" routerLink="/events">
+        <ion-icon name="bookmark-outline"></ion-icon>
+        <span>Eventos</span>
+      </button>
+
+      <button class="menu-link" routerLink="/messages">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+        <span>Mensajes</span>
+      </button>
+
+      <button class="menu-link" routerLink="/profile">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+      </button>
+
+      <button class="menu-link logout" (click)="logout()">
+        <ion-icon name="send-outline"></ion-icon>
+        <span>Salir</span>
+      </button>
+    </div>
+  </ion-content>
 </ion-menu>
+
 <div class="ion-page" id="main-content">
-  <ion-header>
+
+  <ion-header class="feed-header">
     <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title>Menu</ion-title>
+      <div class="toolbar-content">
+
+        <div class="title-wrap">
+          <ion-buttons>
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+
+          <div class="title-badge">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+
+          <div>
+            <h1>Muro</h1>
+            <p>Gestión académica</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-button">
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
+
+          <button class="icon-button" routerLink="/news">
+            <ion-icon name="notifications-outline"></ion-icon>
+          </button>
+        </div>
+
+      </div>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+
+  <ion-content class="feed-content">
+
+    <section class="composer-card">
+
+      <div class="composer-top">
+        <ion-avatar class="avatar">
+          <div class="avatar-fallback">U</div>
+        </ion-avatar>
+
+        <div>
+          <h2>¿Qué quieres anunciar hoy?</h2>
+          <p>Publica en Facultad de Ingeniería</p>
+        </div>
+      </div>
+
+      <textarea
+        class="composer-input"
+        [(ngModel)]="postContent"
+        placeholder="Escribe algo...">
+      </textarea>
+
+      <div class="composer-actions">
+        <ion-button size="small" (click)="publishPost()" [disabled]="isPublishing">
+          {{ isPublishing ? 'Publicando...' : 'Publicar' }}
+        </ion-button>
+      </div>
+
+    </section>
+
+    <section class="feed-section">
+
+      <div class="section-header">
+        <p class="section-kicker">Recientes</p>
+        <h3>Actividad académica</h3>
+      </div>
+
+      @if (postsVm$ | async; as postsVm) {
+
+        @if (postsVm.length) {
+
+          @for (item of postsVm; track item.post.id) {
+
+            <article class="post-card">
+
+              <div class="post-head">
+                <h4>{{ item.post.authorName }}</h4>
+                <p>{{ item.post.authorRole }}</p>
+              </div>
+
+              <p class="post-copy">{{ item.post.content }}</p>
+              
+
+              <div class="post-meta">
+
+                <span>
+                  <ion-icon name="heart-outline"></ion-icon>
+                  {{ item.post.likesCount }}
+                </span>
+
+                <span (click)="toggleComments(item.post.id!)">
+                  💬 {{ item.post.commentsCount || 0 }}
+                </span>
+
+                <span>
+                  <ion-icon name="send-outline"></ion-icon>
+                  Compartir
+                </span>
+
+              </div>
+
+              @if (activeCommentPostId === item.post.id) {
+
+                <div class="comments-box">
+
+                  @if (commentsMap[item.post.id]?.length) {
+
+                    @for (comment of commentsMap[item.post.id]; track comment.id) {
+                      <div class="comment-item">
+                        <p class="comentario">
+                          <strong class="name">{{ comment.authorName }}  </strong>
+                          {{ comment.text }}
+                        </p>
+                      </div>
+                    }
+
+                  } @else {
+                    <p style="color:rgb(74, 114, 244);">No hay comentarios aún</p>
+                  }
+
+                  <div class="publicar">
+                    <input
+                      type="text"
+                      placeholder="Escribe un comentario..."
+                      [(ngModel)]="newComment"
+                    />
+                    <button (click)="addComment(item.post.id)">Publicar</button>
+                  </div>
+                </div>
+              }
+
+            </article>
+
+          }
+
+        } @else {
+
+          <p>No hay publicaciones aún</p>
+
+        }
+
+      }
+
+    </section>
+
+  </ion-content>
 </div>

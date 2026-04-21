@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header translucent>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/main"></ion-back-button>
@@ -7,9 +7,37 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="placeholder-content">
-  <section class="placeholder-card">
-    <h1>Modulo de Noticias</h1>
-    <p>Espacio reservado para noticias institucionales y novedades de la comunidad academica.</p>
-  </section>
+<ion-content class="news-content">
+
+  <div *ngIf="cargando" class="loader">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando noticias...</p>
+  </div>
+
+  <div class="news-container">
+    <ion-card *ngFor="let n of noticias" class="news-card">
+
+      <img 
+        [src]="n.urlToImage || 'assets/no-image.png'" 
+        (error)="onImgError($event)"
+      />
+
+      <ion-card-header>
+        <ion-card-title>{{ n.title }}</ion-card-title>
+        <ion-card-subtitle>{{ n.author || 'Fuente desconocida' }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        {{ n.description }}
+
+        <div class="btn-container">
+          <a [href]="n.url" target="_blank" class="btn-read">
+            Leer más →
+          </a>
+        </div>
+      </ion-card-content>
+
+    </ion-card>
+  </div>
+
 </ion-content>

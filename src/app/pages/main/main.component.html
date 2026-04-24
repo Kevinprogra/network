@@ -77,16 +77,35 @@
 
     <section class="composer-card">
 
-      <div class="composer-top">
-        <ion-avatar class="avatar">
-          <div class="avatar-fallback">U</div>
-        </ion-avatar>
+      @if (currentProfile$ | async; as currentProfile) {
+        <div class="composer-top">
+          <ion-avatar
+            class="avatar"
+            [class.developer-avatar]="isDeveloperProfile(currentProfile)">
+            @if (currentProfile.avatarUrl) {
+              <img
+                class="avatar-image"
+                [src]="currentProfile.avatarUrl"
+                alt="Foto de perfil del usuario" />
+            } @else {
+              <div class="avatar-fallback">{{ getInitials(currentProfile.displayName) }}</div>
+            }
+          </ion-avatar>
 
-        <div>
-          <h2>¿Qué quieres anunciar hoy?</h2>
-          <p>Publica en Facultad de Ingeniería</p>
+          <div>
+            <div class="name-badge-row">
+              <h2>¿Qué quieres anunciar hoy?</h2>
+
+              @if (isDeveloperProfile(currentProfile)) {
+                <span class="role-badge developer-badge">Developer</span>
+              } @else if (isTeacherProfile(currentProfile)) {
+                <span class="role-badge teacher-badge">Profesor</span>
+              }
+            </div>
+            <p>{{ currentProfile.academicProgram || 'Comunidad academica' }}</p>
+          </div>
         </div>
-      </div>
+      }
 
       <textarea
         class="composer-input"
@@ -118,8 +137,50 @@
             <article class="post-card">
 
               <div class="post-head">
-                <h4>{{ item.post.authorName }}</h4>
-                <p>{{ item.post.authorRole }}</p>
+                <div class="identity">
+                  <ion-avatar
+                    class="avatar small"
+                    [class.developer-avatar]="isDeveloperPost(item.authorProfile)">
+                    @if (getAuthorAvatarUrl(item.post, item.authorProfile)) {
+                      <img
+                        class="avatar-image"
+                        [src]="getAuthorAvatarUrl(item.post, item.authorProfile)"
+                        alt="Foto de perfil del autor" />
+                    } @else {
+                      <div class="avatar-fallback">
+                        {{ getInitials(item.authorProfile?.displayName || item.post.authorName) }}
+                      </div>
+                    }
+                  </ion-avatar>
+
+                  <div>
+                    <div class="name-badge-row">
+                      <h4>{{ item.authorProfile?.displayName || item.post.authorName }}</h4>
+
+                      @if (isDeveloperPost(item.authorProfile)) {
+                        <span class="role-badge developer-badge">Developer</span>
+                      } @else if (isTeacherPost(item.authorProfile)) {
+                        <span class="role-badge teacher-badge">Profesor</span>
+                      }
+                    </div>
+                    <p>{{ getDisplayRole(item.post, item.authorProfile) }}</p>
+                  </div>
+                </div>
+
+                @if (isOwnPost(item.post)) {
+                  <div class="post-owner-actions">
+                    <button class="text-action" type="button" (click)="editPost(item.post)">
+                      Editar
+                    </button>
+                    <button class="text-action danger" type="button" (click)="deletePost(item.post)">
+                      Eliminar
+                    </button>
+                  </div>
+                } @else {
+                  <button class="icon-button tiny" type="button">
+                    <ion-icon name="ellipsis-horizontal"></ion-icon>
+                  </button>
+                }
               </div>
 
               <p class="post-copy">{{ item.post.content }}</p>
@@ -151,10 +212,52 @@
 
                     @for (comment of commentsMap[item.post.id]; track comment.id) {
                       <div class="comment-item">
-                        <p class="comentario">
-                          <strong class="name">{{ comment.authorName }}  </strong>
-                          {{ comment.text }}
-                        </p>
+                        <ion-avatar
+                          class="avatar tiny"
+                          [class.developer-avatar]="isDeveloperComment(comment)">
+                          @if (getCommentAvatarUrl(comment)) {
+                            <img
+                              class="avatar-image"
+                              [src]="getCommentAvatarUrl(comment)"
+                              alt="Foto de perfil del autor del comentario" />
+                          } @else {
+                            <div class="avatar-fallback">
+                              {{ getInitials(comment.authorProfile?.displayName || comment.authorName) }}
+                            </div>
+                          }
+                        </ion-avatar>
+
+                        <div class="comment-body">
+                          <div class="comment-head">
+                            <strong>{{ comment.authorProfile?.displayName || comment.authorName }}</strong>
+
+                            @if (isDeveloperComment(comment)) {
+                              <span class="role-badge developer-badge">Developer</span>
+                            } @else if (isTeacherComment(comment)) {
+                              <span class="role-badge teacher-badge">Profesor</span>
+                            }
+                          </div>
+
+                          <p class="comment-role">{{ getCommentDisplayRole(comment) }}</p>
+                          <p class="comentario">{{ comment.text }}</p>
+
+                          @if (isOwnComment(comment)) {
+                            <div class="comment-actions">
+                              <button
+                                class="text-action"
+                                type="button"
+                                (click)="editComment(item.post.id!, comment)">
+                                Editar
+                              </button>
+                              <button
+                                class="text-action danger"
+                                type="button"
+                                (click)="deleteComment(item.post.id!, comment)">
+                                Eliminar
+                              </button>
+                            </div>
+                          }
+                        </div>
                       </div>
                     }
 

@@ -59,21 +59,49 @@
 
     <ion-grid class="stats-grid ion-padding-horizontal">
       <ion-row>
-        <ion-col size="6">
-          <ion-card class="tarjeta-estadistica">
+        <ion-col size="6" size-md="3">
+          <ion-card class="tarjeta-estadistica clickable-card" button (click)="abrirMaterias()">
             <ion-card-content class="ion-text-center">
+              <div class="card-action-hint">
+                <span>Ver detalle</span>
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </div>
               <ion-icon name="book-outline" color="primary"></ion-icon>
-              <h2>6</h2>
+              <h2>{{ notesSummary.totalSubjects }}</h2>
               <p>MATERIAS</p>
+              <small class="card-helper-copy">Toca para abrir</small>
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size="6">
+        <ion-col size="6" size-md="3">
           <ion-card class="tarjeta-estadistica">
             <ion-card-content class="ion-text-center">
+              <ion-icon name="school-outline" color="success"></ion-icon>
+              <h2>{{ notesSummary.averageScore | number:'1.1-1' }}</h2>
+              <p>PROMEDIO ACTUAL</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6" size-md="3">
+          <ion-card class="tarjeta-estadistica">
+            <ion-card-content class="ion-text-center">
+              <ion-icon name="school-outline" color="tertiary"></ion-icon>
+              <h2>{{ (accumulatedAverage ?? 0) | number:'1.1-1' }}</h2>
+              <p>PROMEDIO ACUM.</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6" size-md="3">
+          <ion-card class="tarjeta-estadistica clickable-card events-stat-card" button routerLink="/events">
+            <ion-card-content class="ion-text-center">
+              <div class="card-action-hint">
+                <span>Ver detalle</span>
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </div>
               <ion-icon name="calendar-outline" color="success"></ion-icon>
-              <h2>4</h2>
+              <h2>{{ eventCount }}</h2>
               <p>EVENTOS</p>
+              <small class="card-helper-copy">Toca para abrir</small>
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -93,7 +121,17 @@
       <ion-item>
         <ion-icon name="moon-outline" slot="start"></ion-icon>
         <ion-label>Modo Oscuro</ion-label>
-        <ion-toggle slot="end"></ion-toggle>
+        <button
+          slot="end"
+          type="button"
+          class="theme-switch"
+          [class.is-active]="darkModeEnabled"
+          [attr.aria-pressed]="darkModeEnabled"
+          aria-label="Cambiar modo oscuro"
+          (click)="toggleDarkMode()">
+          <span class="theme-switch-track"></span>
+          <span class="theme-switch-thumb"></span>
+        </button>
       </ion-item>
       <ion-item button routerLink="/news">
         <ion-icon name="notifications-outline" slot="start"></ion-icon>
@@ -113,6 +151,26 @@
             <p>Carne digital y registro</p>
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+        </ion-item>
+        <ion-item lines="none" button routerLink="/notes">
+          <div class="caja-icono" slot="start">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h2>Mis Notas</h2>
+            <p>Consulta y registra tu resumen academico</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+        </ion-item>
+        <ion-item lines="none" button routerLink="/events">
+          <div class="caja-icono" slot="start">
+            <ion-icon name="calendar-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h2>Mis Eventos</h2>
+            <p>Consulta y publica eventos del campus</p>
+          </ion-label>
+          <ion-badge slot="end" color="success">{{ eventCount }}</ion-badge>
         </ion-item>
       </ion-list>
     </div>
@@ -140,6 +198,41 @@
           class="avatar-modal-image"
           [src]="currentUser?.avatarUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'"
           alt="Foto de perfil ampliada">
+      </div>
+    </div>
+  }
+
+  @if (showingNotesModal) {
+    <div class="avatar-overlay" (click)="cerrarMaterias()">
+      <div class="notes-overlay-shell" (click)="$event.stopPropagation()">
+        <button class="avatar-modal-close" type="button" (click)="cerrarMaterias()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+
+        <div class="notes-modal-header">
+          <h3>Materias registradas</h3>
+          <p>Detalle de aula y horario actual.</p>
+        </div>
+
+        <div class="notes-modal-list">
+          @if (notes.length) {
+            @for (note of notes; track note.id) {
+              <div class="notes-modal-item">
+                <div class="notes-modal-main">
+                  <h4>{{ note.subject }}</h4>
+                  <p>{{ note.teacherName || 'Docente por completar' }}</p>
+                </div>
+                <div class="notes-modal-meta">
+                  <span>Semestre {{ note.semester || 'N/A' }}</span>
+                  <span>{{ note.classroom ? 'Aula ' + note.classroom : 'Aula por definir' }}</span>
+                  <span>{{ note.schedule || 'Horario por definir' }}</span>
+                </div>
+              </div>
+            }
+          } @else {
+            <p class="notes-empty-copy">Aun no has registrado materias.</p>
+          }
+        </div>
       </div>
     </div>
   }

@@ -38,6 +38,19 @@ import { ProfileService } from '../../core/services/profile.service';
 import { CommentService } from '../../core/services/comment.service';
 import { CommonModule } from '@angular/common';
 
+interface FeedPostVm {
+  post: Post;
+  authorProfile?: UserProfile;
+}
+
+interface FeedCommentVm {
+  id?: string;
+  authorId?: string;
+  authorName: string;
+  text: string;
+  createdAt?: unknown;
+  authorProfile?: UserProfile;
+}
 
 @Component({
   selector: 'app-main',
@@ -74,10 +87,11 @@ export class MainComponent {
       posts.map((post) => ({
         post,
         authorProfile: profiles.find((profile) => profile.uid === post.authorId),
-      })),
+      }) as FeedPostVm),
     ),
   );
   protected readonly currentProfile$ = this.profileService.getCurrentProfile();
+  protected readonly currentUser$ = this.authService.user$;
   protected postContent = '';
   protected publishError = '';
   protected isPublishing = false;
@@ -109,24 +123,31 @@ export class MainComponent {
       searchOutline,
       sendOutline,
     });
+
+    this.authService.user$.subscribe((user) => {
+      this.currentUserId = user?.uid ?? null;
+    });
   }
 
 
-  commentsMap: { [postId: string]: any[] } = {};
+  commentsMap: Record<string, FeedCommentVm[]> = {};
+  currentUserId: string | null = null;
 
 
 
 
 
-loadComments(postId: string) {
-  console.log('resivir usuario resteandooo', postId);
-
-  this.commentService.getComments(postId)
-    .subscribe((data) => {
-      console.log('probando entrada comentarios kkkk', data);
-
-      this.commentsMap[postId] = data; 
-    });
+loadComments(postId: string): void {
+  combineLatest([this.commentService.getComments(postId), this.allProfiles$]).pipe(
+    map(([comments, profiles]) =>
+      (comments as FeedCommentVm[]).map((comment) => ({
+        ...comment,
+        authorProfile: profiles.find((profile) => profile.uid === comment.authorId),
+      })),
+    ),
+  ).subscribe((data) => {
+    this.commentsMap[postId] = data;
+  });
 }
 
 
@@ -146,9 +167,7 @@ toggleComments(postId: string) {
 
   if (this.commentsMap[postId]) return;
 
-  this.postsService.getComments(postId).subscribe((comments) => {
-    this.commentsMap[postId] = comments;
-  });
+  this.loadComments(postId);
 }
 
 
@@ -228,6 +247,135 @@ async addComment(postId: string) {
 
   protected getAuthorAvatarUrl(post: Post, authorProfile?: UserProfile): string {
     return authorProfile?.avatarUrl || post.authorAvatarUrl || '';
+  }
+
+  protected isOwnPost(post: Post): boolean {
+    return !!this.currentUserId && this.currentUserId === post.authorId;
+  }
+
+  protected isOwnComment(comment: FeedCommentVm): boolean {
+    return !!this.currentUserId && this.currentUserId === comment.authorId;
+  }
+
+  protected getDisplayRole(post: Post, authorProfile?: UserProfile): string {
+    if (authorProfile?.role === 'developer') {
+      return 'Developer';
+    }
+
+    if (authorProfile?.role === 'teacher') {
+      return 'Profesor';
+    }
+
+    return post.authorRole || 'Comunidad academica';
+  }
+
+  protected getCommentAvatarUrl(comment: FeedCommentVm): string {
+    return comment.authorProfile?.avatarUrl || '';
+  }
+
+  protected getCommentDisplayRole(comment: FeedCommentVm): string {
+    if (comment.authorProfile?.role === 'developer') {
+      return 'Developer';
+    }
+
+    if (comment.authorProfile?.role === 'teacher') {
+      return 'Profesor';
+    }
+
+    return 'Comunidad academica';
+  }
+
+  protected isDeveloperComment(comment: FeedCommentVm): boolean {
+    return comment.authorProfile?.role === 'developer';
+  }
+
+  protected isTeacherComment(comment: FeedCommentVm): boolean {
+    return comment.authorProfile?.role === 'teacher';
+  }
+
+  protected getInitials(value?: string | null): string {
+    const normalized = value?.trim();
+
+    if (!normalized) {
+      return 'U';
+    }
+
+    const parts = normalized.split(/\s+/).filter(Boolean).slice(0, 2);
+    return parts.map((part) => part[0]?.toUpperCase() ?? '').join('') || 'U';
+  }
+
+  async editPost(post: Post): Promise<void> {
+    if (!post.id || !this.isOwnPost(post)) {
+      return;
+    }
+
+    const updatedContent = window.prompt('Edita tu publicación', post.content)?.trim();
+
+    if (!updatedContent || updatedContent === post.content.trim()) {
+      return;
+    }
+
+    try {
+      await this.postsService.updatePost(post.id, updatedContent);
+    } catch (error) {
+      console.error('Error al editar publicación:', error);
+    }
+  }
+
+  async deletePost(post: Post): Promise<void> {
+    if (!post.id || !this.isOwnPost(post)) {
+      return;
+    }
+
+    if (!window.confirm('¿Seguro que quieres eliminar esta publicación?')) {
+      return;
+    }
+
+    try {
+      await this.postsService.deletePost(post.id);
+
+      if (this.activeCommentPostId === post.id) {
+        this.activeCommentPostId = null;
+      }
+
+      delete this.commentsMap[post.id];
+    } catch (error) {
+      console.error('Error al eliminar publicación:', error);
+    }
+  }
+
+  async editComment(postId: string, comment: FeedCommentVm): Promise<void> {
+    if (!comment.id || !this.isOwnComment(comment)) {
+      return;
+    }
+
+    const updatedText = window.prompt('Edita tu comentario', comment.text)?.trim();
+
+    if (!updatedText || updatedText === comment.text.trim()) {
+      return;
+    }
+
+    try {
+      await this.postsService.updateComment(postId, comment.id, updatedText);
+    } catch (error) {
+      console.error('Error al editar comentario:', error);
+    }
+  }
+
+  async deleteComment(postId: string, comment: FeedCommentVm): Promise<void> {
+    if (!comment.id || !this.isOwnComment(comment)) {
+      return;
+    }
+
+    if (!window.confirm('¿Seguro que quieres eliminar este comentario?')) {
+      return;
+    }
+
+    try {
+      await this.postsService.deleteComment(postId, comment.id);
+    } catch (error) {
+      console.error('Error al eliminar comentario:', error);
+    }
   }
 
   protected getRelativeTimeLabel(value: unknown): string {

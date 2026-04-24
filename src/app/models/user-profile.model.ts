@@ -7,6 +7,7 @@ export interface UserProfile {
   faculty?: string;
   studyMode?: string;
   academicProgram?: string;
+  accumulatedAverage?: number | null;
   interests?: string[];
   semester?: number | null;
   role?: string;

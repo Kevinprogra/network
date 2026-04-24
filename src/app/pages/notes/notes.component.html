@@ -1,0 +1,212 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Notas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="notes-content">
+  <div class="notes-shell ion-padding">
+    <ion-card class="summary-card">
+      <ion-card-content>
+        <div class="summary-copy">
+          <p class="eyebrow">RESUMEN ACADEMICO</p>
+          <h2>Control de notas</h2>
+          <p>Registra materias y mantén visible tu promedio en el perfil.</p>
+        </div>
+
+        <div class="summary-stats">
+          <div class="stat-pill">
+            <span class="stat-value">{{ notes.length }}</span>
+            <span class="stat-label">Materias</span>
+          </div>
+          <div class="stat-pill accent">
+            <span class="stat-value">{{ averageScore }}</span>
+            <span class="stat-label">Promedio actual</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value">{{ syncState.accumulatedAverage ?? 0 | number:'1.1-1' }}</span>
+            <span class="stat-label">Promedio acumulado</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="sync-card">
+      <ion-card-content>
+        <div class="sync-header">
+          <div>
+            <p class="eyebrow sync-eyebrow">SINCRONIZACION</p>
+            <h3>Portal institucional</h3>
+            <p class="sync-copy">
+              Si el estudiante lo autoriza, esta opcion deja lista la solicitud para sincronizar notas
+              desde el portal academico.
+            </p>
+          </div>
+
+          <ion-toggle
+            [ngModel]="syncState.enabled"
+            (ngModelChange)="toggleSync($event)"></ion-toggle>
+        </div>
+
+        <div class="sync-status-row">
+          <div class="sync-status-pill" [class.pending]="syncState.lastStatus === 'pending'">
+            <ion-icon name="sync-outline"></ion-icon>
+            <span>{{ getSyncStatusLabel() }}</span>
+          </div>
+
+          <ion-button fill="clear" size="small" (click)="openSyncInfo()">
+            Como funciona
+          </ion-button>
+        </div>
+
+        <ion-button
+          expand="block"
+          class="sync-button"
+          color="primary"
+          fill="outline"
+          [disabled]="!syncState.enabled || requestingSync"
+          (click)="requestSync()">
+          Solicitar sincronizacion
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="editor-card">
+      <ion-card-header>
+        <ion-card-title>{{ editingNoteId ? 'Editar nota' : 'Registrar nota' }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="form-grid">
+          <ion-item lines="none">
+            <ion-icon name="book-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Materia"
+              labelPlacement="stacked"
+              placeholder="Ej. Estructura de Datos"
+              [(ngModel)]="form.subject"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-icon name="school-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Docente"
+              labelPlacement="stacked"
+              placeholder="Opcional"
+              [(ngModel)]="form.teacherName"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-icon name="book-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Aula"
+              labelPlacement="stacked"
+              placeholder="Ej. B204"
+              [(ngModel)]="form.classroom"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-icon name="book-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Horario"
+              labelPlacement="stacked"
+              placeholder="Ej. 6:30 pm - 9:00 pm"
+              [(ngModel)]="form.schedule"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            <ion-input
+              type="number"
+              min="0"
+              max="5"
+              step="0.1"
+              label="Nota final"
+              labelPlacement="stacked"
+              placeholder="0.0 - 5.0"
+              [(ngModel)]="form.score"></ion-input>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            <ion-input
+              type="number"
+              min="1"
+              max="20"
+              step="1"
+              label="Semestre"
+              labelPlacement="stacked"
+              placeholder="Opcional"
+              [(ngModel)]="form.semester"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="form-actions">
+          <ion-button expand="block" (click)="saveNote()" [disabled]="saving">
+            {{ editingNoteId ? 'Actualizar nota' : 'Guardar nota' }}
+          </ion-button>
+
+          @if (editingNoteId) {
+            <ion-button expand="block" fill="outline" color="medium" (click)="cancelEdit()">
+              Cancelar edicion
+            </ion-button>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="notes-list">
+      @if (notes.length) {
+        @for (note of notes; track note.id) {
+          <ion-card class="note-card">
+            <ion-card-content>
+              <div class="note-header">
+                <div>
+                  <h3>{{ note.subject }}</h3>
+                  <p>{{ note.teacherName || 'Docente por completar' }}</p>
+                </div>
+
+                <div class="note-badge">
+                  {{ note.score | number:'1.1-1' }}
+                </div>
+              </div>
+
+              <div class="note-meta">
+                <span>Semestre {{ note.semester || 'N/A' }}</span>
+                @if (note.classroom) {
+                  <span>Aula {{ note.classroom }}</span>
+                }
+                @if (note.schedule) {
+                  <span>{{ note.schedule }}</span>
+                }
+              </div>
+
+              <div class="note-actions">
+                <ion-button size="small" fill="clear" (click)="editNote(note)">
+                  <ion-icon slot="start" name="pencil-outline"></ion-icon>
+                  Editar
+                </ion-button>
+
+                <ion-button size="small" fill="clear" color="danger" (click)="deleteNote(note)">
+                  <ion-icon slot="start" name="trash-outline"></ion-icon>
+                  Eliminar
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      } @else {
+        <ion-card class="empty-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="book-outline"></ion-icon>
+            <h3>Aun no has registrado notas</h3>
+            <p>Agrega tu primera materia para que el perfil muestre tu resumen academico real.</p>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+  </div>
+</ion-content>

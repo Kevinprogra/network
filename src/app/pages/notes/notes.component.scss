@@ -1,0 +1,225 @@
+.notes-content {
+  --background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+}
+
+.notes-shell {
+  display: grid;
+  gap: 16px;
+}
+
+.summary-card,
+.sync-card,
+.editor-card,
+.note-card,
+.empty-card {
+  margin: 0;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(30, 76, 165, 0.08);
+}
+
+.summary-card {
+  background: linear-gradient(145deg, #0f4fc9 0%, #3e7dff 100%);
+  color: #fff;
+}
+
+.summary-copy {
+  margin-bottom: 18px;
+}
+
+.summary-copy h2 {
+  margin: 4px 0 8px;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.summary-copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.stat-pill.accent {
+  background: rgba(6, 28, 77, 0.28);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.sync-card {
+  background: #ffffff;
+}
+
+.sync-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sync-eyebrow {
+  color: #5d7dbe;
+}
+
+.sync-header h3 {
+  margin: 6px 0 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1d2a40;
+}
+
+.sync-copy {
+  margin: 0;
+  color: #6b7890;
+  line-height: 1.45;
+}
+
+.sync-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.sync-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #2459c9;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.sync-status-pill.pending {
+  background: #fff2dd;
+  color: #9b6800;
+}
+
+.sync-button {
+  margin-top: 16px;
+}
+
+.editor-card ion-item {
+  --background: #f7faff;
+  --border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+.form-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.note-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.note-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1d2a40;
+}
+
+.note-header p {
+  margin: 4px 0 0;
+  color: #6b7890;
+  font-size: 0.9rem;
+}
+
+.note-badge {
+  min-width: 60px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  text-align: center;
+  font-weight: 800;
+  color: #0f4fc9;
+  background: #eaf1ff;
+}
+
+.note-meta {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  color: #6b7890;
+  font-size: 0.9rem;
+}
+
+.note-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+@media (max-width: 640px) {
+  .summary-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.note-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.empty-card ion-card-content {
+  padding: 32px 20px;
+}
+
+.empty-card ion-icon {
+  font-size: 2rem;
+  color: #3e7dff;
+}
+
+.empty-card h3 {
+  margin: 12px 0 8px;
+  font-size: 1.05rem;
+  color: #1d2a40;
+}
+
+.empty-card p {
+  margin: 0;
+  color: #6b7890;
+}

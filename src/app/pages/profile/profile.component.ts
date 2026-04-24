@@ -18,10 +18,19 @@ import {
   moonOutline,
   notificationsOutline,
   personOutline,
+  schoolOutline,
 } from 'ionicons/icons';
 
+import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 import { AuthService } from '../../core/auth/auth.service';
+import { EventService } from '../../core/services/event.service';
+import { ThemeService } from '../../core/services/theme.service';
+import { Note, NotesSummary } from '../../models/note.model';
+import { NotesService } from '../../core/services/notes.service';
 import { ProfileService } from '../../core/services/profile.service';
+import { CampusEvent } from '../../models/campus-event.model';
 import { UserProfile } from '../../models/user-profile.model';
 
 @Component({
@@ -35,6 +44,9 @@ export class ProfileComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly authService = inject(AuthService);
   private readonly actionSheetController = inject(ActionSheetController);
+  private readonly notesService = inject(NotesService);
+  private readonly eventService = inject(EventService);
+  private readonly themeService = inject(ThemeService);
 
   @ViewChild('avatarInput') private avatarInput?: ElementRef<HTMLInputElement>;
   @ViewChild('cameraInput') private cameraInput?: ElementRef<HTMLInputElement>;
@@ -42,6 +54,15 @@ export class ProfileComponent implements OnInit {
   public currentUser: UserProfile | undefined;
   public uploadingAvatar = false;
   public showingAvatarPreview = false;
+  public notesSummary: NotesSummary = {
+    totalSubjects: 0,
+    averageScore: 0,
+  };
+  public accumulatedAverage: number | null = null;
+  public notes: Note[] = [];
+  public showingNotesModal = false;
+  public eventCount = 0;
+  public darkModeEnabled = false;
 
   constructor() {
     addIcons({
@@ -57,12 +78,33 @@ export class ProfileComponent implements OnInit {
       moonOutline,
       notificationsOutline,
       personOutline,
+      schoolOutline,
     });
   }
 
   ngOnInit(): void {
     this.profileService.getCurrentProfile().subscribe((profile) => {
       this.currentUser = profile;
+      this.accumulatedAverage =
+        typeof profile?.accumulatedAverage === 'number' ? profile.accumulatedAverage : null;
+    });
+
+    this.notesService.getCurrentUserNotesSummary().subscribe((summary) => {
+      this.notesSummary = summary;
+    });
+
+    this.notesService.getCurrentUserNotes().subscribe((notes) => {
+      this.notes = notes;
+    });
+
+    this.authService.user$
+      .pipe(switchMap((user) => (user ? this.eventService.getUserEvents(user.uid) : of([] as CampusEvent[]))))
+      .subscribe((events) => {
+        this.eventCount = events.length;
+      });
+
+    this.themeService.darkMode$.subscribe((enabled) => {
+      this.darkModeEnabled = enabled;
     });
   }
 
@@ -175,6 +217,22 @@ export class ProfileComponent implements OnInit {
 
   cerrarVistaAvatar(): void {
     this.showingAvatarPreview = false;
+  }
+
+  abrirMaterias(): void {
+    this.showingNotesModal = true;
+  }
+
+  cerrarMaterias(): void {
+    this.showingNotesModal = false;
+  }
+
+  onDarkModeChange(enabled: boolean): void {
+    this.themeService.setDarkMode(enabled);
+  }
+
+  toggleDarkMode(): void {
+    this.themeService.setDarkMode(!this.darkModeEnabled);
   }
 
   protected getRoleBadgeLabel(role?: string): string {

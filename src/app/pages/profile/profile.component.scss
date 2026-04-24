@@ -262,11 +262,60 @@
   color: var(--ion-color-medium);
 }
 
+.theme-switch {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-switch-track,
+.theme-switch-thumb {
+  position: absolute;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.theme-switch-track {
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(154, 166, 184, 0.36);
+  box-shadow: inset 0 0 0 1px rgba(101, 120, 148, 0.14);
+}
+
+.theme-switch-thumb {
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(18, 35, 58, 0.22);
+}
+
+.theme-switch.is-active .theme-switch-track {
+  background: rgba(63, 135, 255, 0.38);
+}
+
+.theme-switch.is-active .theme-switch-thumb {
+  transform: translateX(20px);
+  background: #3f87ff;
+}
+
 .stats-grid {
   padding-top: 4px;
 
   ion-row {
     gap: 12px;
+    justify-content: center;
   }
 
   ion-col {
@@ -284,28 +333,109 @@
     display: grid;
     justify-items: center;
     align-content: center;
-    gap: 6px;
-    min-height: 104px;
+    gap: 5px;
+    min-height: 98px;
     text-align: center;
   }
 
   ion-icon {
     display: block;
-    font-size: 2rem;
+    font-size: 1.7rem;
     margin: 0;
   }
 
   h2 {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     margin: 0;
   }
 
   p {
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     font-weight: 600;
     color: var(--ion-color-medium);
     margin: 0;
+  }
+}
+
+.clickable-card {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+  border: 1px solid rgba(63, 135, 255, 0.14);
+}
+
+.clickable-card ion-card-content {
+  position: relative;
+}
+
+.clickable-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(63, 135, 255, 0.08), transparent 55%);
+  pointer-events: none;
+}
+
+.clickable-card:hover,
+.clickable-card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(43, 102, 204, 0.12);
+  border-color: rgba(63, 135, 255, 0.28);
+}
+
+.clickable-card:active {
+  transform: scale(0.985);
+}
+
+.card-action-hint {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(63, 135, 255, 0.1);
+  color: #2f6fd6;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.card-action-hint ion-icon {
+  font-size: 0.8rem;
+}
+
+.card-helper-copy {
+  display: block;
+  margin-top: 1px;
+  color: #4f7fd8;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 576px) {
+  .tarjeta-estadistica {
+    ion-card-content {
+      min-height: 92px;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.62rem;
+    }
   }
 }
 
@@ -363,6 +493,81 @@
       }
     }
   }
+}
+
+.notes-overlay-shell {
+  position: relative;
+  width: min(92vw, 520px);
+  max-height: 82vh;
+  overflow: auto;
+  border-radius: 24px;
+  padding: 20px 18px 18px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 34, 68, 0.28);
+}
+
+.notes-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1d2a40;
+}
+
+.notes-modal-header p {
+  margin: 6px 0 0;
+  color: #6b7890;
+  font-size: 0.9rem;
+}
+
+.notes-modal-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.notes-modal-item {
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  background: #f7faff;
+  border: 1px solid rgba(104, 138, 201, 0.12);
+}
+
+.notes-modal-main h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1d2a40;
+}
+
+.notes-modal-main p {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+  color: #6b7890;
+}
+
+.notes-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 10px;
+}
+
+.notes-modal-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #edf3ff;
+  color: #355d9e;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.notes-empty-copy {
+  margin: 8px 0 0;
+  color: #6b7890;
+  text-align: center;
 }
 
 .action-buttons {

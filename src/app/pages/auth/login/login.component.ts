@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
@@ -43,6 +43,9 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  @ViewChild('emailInput', { read: IonInput }) private emailInput?: IonInput;
+  @ViewChild('passwordInput', { read: IonInput }) private passwordInput?: IonInput;
+
   email = '';
   password = '';
   showPassword = false;
@@ -62,6 +65,14 @@ export class LoginComponent {
   }
 
   async submit(): Promise<void> {
+    await this.syncAutofilledValues();
+
+    if (!this.email.trim() || !this.password.trim()) {
+      this.errorMessage = 'Ingresa tu correo y contrasena para continuar.';
+      this.infoMessage = '';
+      return;
+    }
+
     this.loading = true;
     this.errorMessage = '';
     this.infoMessage = '';
@@ -101,5 +112,29 @@ export class LoginComponent {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  private async syncAutofilledValues(): Promise<void> {
+    const [emailValue, passwordValue] = await Promise.all([
+      this.readIonInputValue(this.emailInput),
+      this.readIonInputValue(this.passwordInput),
+    ]);
+
+    if (emailValue) {
+      this.email = emailValue;
+    }
+
+    if (passwordValue) {
+      this.password = passwordValue;
+    }
+  }
+
+  private async readIonInputValue(input?: IonInput): Promise<string> {
+    if (!input) {
+      return '';
+    }
+
+    const nativeInput = await input.getInputElement();
+    return nativeInput?.value?.trim() ?? '';
   }
 }

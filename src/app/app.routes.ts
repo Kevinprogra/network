@@ -65,6 +65,12 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'notes',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/notes/notes.component').then((m) => m.NotesComponent),
+  },
+  {
     path: 'chat',
     redirectTo: 'messages',
     pathMatch: 'full',

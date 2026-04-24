@@ -5,11 +5,152 @@
     </ion-buttons>
     <ion-title>Eventos</ion-title>
   </ion-toolbar>
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment [value]="feedScope" (ionChange)="onFeedScopeChange($event)">
+      <ion-segment-button value="campus">Campus</ion-segment-button>
+      <ion-segment-button value="mine">Mis eventos</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="placeholder-content">
-  <section class="placeholder-card">
-    <h1>Modulo de Eventos</h1>
-    <p>Espacio reservado para convocatorias, charlas, talleres y actividades academicas.</p>
-  </section>
+<ion-content class="events-content">
+  @if (loading) {
+    <div class="events-state ion-padding ion-text-center">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Cargando eventos...</p>
+    </div>
+  } @else if (events.length === 0) {
+    <div class="events-state ion-padding">
+      <div class="empty-card">
+        @if (feedScope === 'campus') {
+          <h2>Sin eventos en el campus</h2>
+          <p>Aun no hay convocatorias publicas. Publica uno visible para todos o guarda uno solo para ti en Mis eventos.</p>
+        } @else {
+          <h2>No tienes eventos guardados</h2>
+          <p>Crea recordatorios privados o publica algo para el campus desde el boton de abajo.</p>
+        }
+        <ion-button expand="block" (click)="openCreate()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Nuevo evento
+        </ion-button>
+      </div>
+    </div>
+  } @else {
+    <ion-list lines="none" class="events-list">
+      @for (event of events; track event.id) {
+        <ion-item class="event-row" lines="none">
+          <div class="event-card">
+            <div class="event-card-head">
+              <h3>{{ event.asunto }}</h3>
+              <div class="event-pills">
+                @if (event.visibility === 'private') {
+                  <span class="event-pill event-pill-private">Solo para ti</span>
+                }
+                @if (isMine(event)) {
+                  <span class="event-pill">Tuyo</span>
+                }
+              </div>
+            </div>
+            <p class="event-meta">
+              <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+              {{ event.fecha | date: 'medium' }}
+            </p>
+            <p class="event-meta">
+              <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+              {{ event.lugar }}
+            </p>
+            @if (canEdit(event)) {
+              <div class="event-card-actions">
+                <ion-button size="small" fill="outline" (click)="openEdit(event); $event.stopPropagation()">
+                  <ion-icon name="create-outline" slot="start" aria-hidden="true"></ion-icon>
+                  Editar
+                </ion-button>
+                <ion-button size="small" fill="outline" color="danger" (click)="confirmDelete(event); $event.stopPropagation()">
+                  <ion-icon name="trash-outline" slot="start" aria-hidden="true"></ion-icon>
+                  Eliminar
+                </ion-button>
+              </div>
+            }
+          </div>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+  @if (!loading) {
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button (click)="openCreate()" aria-label="Nuevo evento">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
+
+  <ion-modal [isOpen]="createOpen" (didDismiss)="closeCreate()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ editingEventId ? 'Editar evento' : 'Nuevo evento' }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeCreate()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-text color="medium">
+          @if (draftVisibility === 'public') {
+            <p class="modal-lead">Visible para todos en la pestana Campus.</p>
+          } @else {
+            <p class="modal-lead">Solo tu lo veras en Mis eventos; no aparece en el campus.</p>
+          }
+        </ion-text>
+
+        <ion-item class="modal-field modal-segment-wrap" lines="none">
+          <ion-label class="modal-segment-label">Quien puede verlo</ion-label>
+          <ion-segment [(ngModel)]="draftVisibility" class="visibility-segment">
+            <ion-segment-button value="public">Campus</ion-segment-button>
+            <ion-segment-button value="private">Solo yo</ion-segment-button>
+          </ion-segment>
+        </ion-item>
+
+        <ion-item class="modal-field" lines="full">
+          <ion-input
+            label="Asunto"
+            labelPlacement="stacked"
+            [(ngModel)]="draftAsunto"
+            placeholder="Ej. Taller de prototipado rapido">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="modal-field" lines="full">
+          <ion-input
+            label="Lugar"
+            labelPlacement="stacked"
+            [(ngModel)]="draftLugar"
+            placeholder="Aula, auditorio o enlace">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="modal-field" lines="none">
+          <ion-input
+            type="datetime-local"
+            label="Fecha y hora"
+            labelPlacement="stacked"
+            [(ngModel)]="draftFechaIso">
+          </ion-input>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          class="modal-save"
+          (click)="saveEvent()"
+          [disabled]="saving">
+          @if (saving) {
+            <ion-spinner name="crescent" color="light"></ion-spinner>
+          } @else {
+            {{ editingEventId ? 'Guardar cambios' : 'Guardar evento' }}
+          }
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  notesSyncEndpointUrl: 'http://localhost:3001/api/sync-notes',
   firebase: {
     apiKey: 'AIzaSyDYEjk0AyFCHv9gOKyCBIJNAGIYA0HawKw',
     authDomain: 'appredsocialu-2.firebaseapp.com',

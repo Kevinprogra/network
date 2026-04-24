@@ -33,5 +33,200 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import '@ionic/angular/css/palettes/dark.class.css';
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+.ion-palette-dark {
+  body,
+  ion-app {
+    background: #0b1220;
+    color: #e5edf7;
+  }
+
+  .feed-content,
+  .messages-content,
+  .chat-room-content,
+  .notes-content,
+  .events-content,
+  .news-content,
+  .profile-academic-content,
+  .notifications-content,
+  .chat-content {
+    --background: linear-gradient(180deg, #0b1220 0%, #111a2d 100%) !important;
+  }
+
+  .feed-header ion-toolbar,
+  .messages-header ion-toolbar,
+  .chat-room-header ion-toolbar,
+  .chat-room-footer ion-toolbar {
+    --background: rgba(12, 18, 32, 0.9) !important;
+    --border-color: rgba(97, 116, 145, 0.18) !important;
+  }
+
+  .menu-content {
+    --background: linear-gradient(180deg, #0b1220 0%, #121b2d 100%) !important;
+  }
+
+  .menu-link {
+    background: #172234;
+    color: #d3ddec;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  }
+
+  .menu-link.active {
+    background: #203454;
+    color: #8fc0ff;
+  }
+
+  .menu-link.logout {
+    color: #ff8b8b;
+  }
+
+  .icon-button,
+  .header-icon {
+    background: #172234;
+    color: #d3ddec;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+  }
+
+  .composer-card,
+  .post-card,
+  .conversation-item,
+  .messages-empty-cta,
+  .sync-card,
+  .editor-card,
+  .note-card,
+  .empty-card,
+  .event-card,
+  .news-card,
+  .academic-card,
+  .academic-form,
+  .preferences-card,
+  .account-card,
+  .profile-panel,
+  .profile-modal-card {
+    background: rgba(19, 29, 46, 0.94) !important;
+    border-color: rgba(94, 114, 141, 0.24) !important;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.24) !important;
+    color: #e5edf7;
+  }
+
+  .composer-top h2,
+  .post-head h4,
+  .title-wrap h1,
+  .conversation-topline h2,
+  .messages-empty-cta h3,
+  .chat-title h1,
+  .note-header h3,
+  .sync-header h3,
+  .empty-card h3,
+  .empty-card h2,
+  .event-card-head h3,
+  ion-card-title,
+  .modal-segment-label {
+    color: #eef4ff !important;
+  }
+
+  .title-wrap p,
+  .composer-top p,
+  .section-kicker,
+  .post-head p,
+  .conversation-time,
+  .conversation-message,
+  .messages-empty-cta p,
+  .chat-title p,
+  .note-header p,
+  .note-meta,
+  .sync-copy,
+  .empty-card p,
+  .event-meta,
+  ion-card-subtitle,
+  ion-card-content,
+  .modal-lead {
+    color: #99a8bc !important;
+  }
+
+  .messages-search,
+  .chat-input {
+    --background: #172234 !important;
+    --placeholder-color: #8fa0b6 !important;
+    color: #e5edf7;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24) !important;
+  }
+
+  .message-bubble {
+    background: #172234;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
+
+    p {
+      color: #e5edf7;
+    }
+  }
+
+  .online-dot {
+    border-color: #172234;
+  }
+
+  .sync-status-pill {
+    background: #1d2d49;
+    color: #8fc0ff;
+  }
+
+  .sync-status-pill.pending {
+    background: rgba(155, 104, 0, 0.16);
+    color: #ffd07c;
+  }
+
+  .note-badge {
+    background: #1d2d49;
+    color: #8fc0ff;
+  }
+
+  .event-pill {
+    background: rgba(56, 128, 255, 0.18);
+    color: #9dc7ff;
+  }
+
+  .event-pill-private {
+    background: rgba(122, 140, 165, 0.16);
+    color: #c0cbda;
+  }
+
+  .event-card-actions {
+    border-top-color: rgba(94, 114, 141, 0.22);
+  }
+
+  .editor-card ion-item,
+  .academic-form ion-item,
+  .modal-field {
+    --background: #172234 !important;
+    --color: #e5edf7 !important;
+    --highlight-color-focused: #6ea8ff !important;
+    --border-color: rgba(94, 114, 141, 0.22) !important;
+  }
+
+  .academic-card,
+  .academic-form,
+  .preferences-card,
+  .account-card {
+    background: rgba(19, 29, 46, 0.94) !important;
+  }
+
+  .news-card,
+  .news-card ion-card-header {
+    background: rgba(19, 29, 46, 0.94) !important;
+    color: #e5edf7 !important;
+  }
+
+  .btn-read {
+    background: #2f7eff;
+    color: #fff !important;
+  }
+
+  .teacher-badge {
+    background: linear-gradient(180deg, #223754, #1a2d46);
+    color: #9fc5ff;
+    border-color: rgba(103, 149, 222, 0.2);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+  }
+}

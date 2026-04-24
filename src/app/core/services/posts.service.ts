@@ -5,6 +5,7 @@ import {
   addDoc,
   collection,
   collectionData,
+  deleteDoc,
   orderBy,
   query,
   serverTimestamp,
@@ -102,6 +103,42 @@ constructor(private commentService: CommentService) {}
     }
   }
 
+  async updateComment(postId: string, commentId: string, text: string): Promise<void> {
+    const currentUser = this.auth.currentUser;
+
+    if (!currentUser) {
+      throw new Error('No authenticated user.');
+    }
+
+    const cleanText = text.trim();
+
+    if (!cleanText) {
+      throw new Error('Comment content is empty.');
+    }
+
+    const commentRef = doc(this.firestore, `posts/${postId}/comments/${commentId}`);
+
+    await updateDoc(commentRef, {
+      text: cleanText,
+    });
+  }
+
+  async deleteComment(postId: string, commentId: string): Promise<void> {
+    const currentUser = this.auth.currentUser;
+
+    if (!currentUser) {
+      throw new Error('No authenticated user.');
+    }
+
+    const commentRef = doc(this.firestore, `posts/${postId}/comments/${commentId}`);
+    await deleteDoc(commentRef);
+
+    const postRef = doc(this.firestore, `posts/${postId}`);
+    await updateDoc(postRef, {
+      commentsCount: increment(-1),
+    });
+  }
+
   async createPost(content: string): Promise<void> {
     const currentUser = this.auth.currentUser;
 
@@ -137,5 +174,36 @@ constructor(private commentService: CommentService) {}
       commentsCount: 0,
       createdAt: serverTimestamp(),
     });
+  }
+
+  async updatePost(postId: string, content: string): Promise<void> {
+    const currentUser = this.auth.currentUser;
+
+    if (!currentUser) {
+      throw new Error('No authenticated user available.');
+    }
+
+    const cleanContent = content.trim();
+
+    if (!cleanContent) {
+      throw new Error('Post content is empty.');
+    }
+
+    const postRef = doc(this.firestore, 'posts', postId);
+
+    await updateDoc(postRef, {
+      content: cleanContent,
+    });
+  }
+
+  async deletePost(postId: string): Promise<void> {
+    const currentUser = this.auth.currentUser;
+
+    if (!currentUser) {
+      throw new Error('No authenticated user available.');
+    }
+
+    const postRef = doc(this.firestore, 'posts', postId);
+    await deleteDoc(postRef);
   }
 }
